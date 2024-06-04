@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ottawa's Premier Garden Centre</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+        }
+        .header {
+            background-color: #333;
+            color: #fff;
+            text-align: center;
+            padding: 1rem 0;
+        }
+        .header a {
+            color: #fff;
+            text-decoration: none;
+            margin: 0 1rem;
+        }
+        .nav {
+            display: flex;
+            justify-content: center;
+            background-color: #444;
+            padding: 1rem 0;
+        }
+        .nav a {
+            color: #fff;
+            text-decoration: none;
+            margin: 0 1rem;
+            padding: 0.5rem 1rem;
+        }
+        .nav a:hover {
+            background-color: #555;
+        }
+        .dropdown {
+            position: relative;
+            display: inline-block;
+        }
+        .dropdown-content {
+            display: none;
+            position: absolute;
+            background-color: #444;
+            min-width: 160px;
+            box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+            z-index: 1;
+        }
+        .dropdown-content a {
+            color: #fff;
+            padding: 12px 16px;
+            text-decoration: none;
+            display: block;
+        }
+        .dropdown-content a:hover {
+            background-color: #555;
+        }
+        .dropdown:hover .dropdown-content {
+            display: block;
+        }
+        .products {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            padding: 2rem;
+        }
+        .product {
+            background-color: #fff;
+            border: 1px solid #ddd;
+            margin: 1rem;
+            padding: 1rem;
+            text-align: center;
+            border-radius: 5px;
+            width: calc(25% - 2rem);
+        }
+        .product img {
+            max-width: 100%;
+            border-radius: 5px;
+        }
+        .product h3 {
+            font-size: 1.2rem;
+            margin: 0.5rem 0;
+        }
+        .product p {
+            font-size: 1rem;
+            color: #555;
+        }
+        .product .price {
+            font-size: 1.2rem;
+            color: #333;
+            margin: 0.5rem 0;
+        }
+        .footer {
+            background-color: #333;
+            color: #fff;
+            text-align: center;
+            padding: 1rem 0;
+            position: absolute;
+            width: 100%;
+            bottom: 0;
+        }
+        @media (max-width: 768px) {
+            .product {
+                width: calc(50% - 2rem);
+            }
+        }
+        @media (max-width: 480px) {
+            .product {
+                width: calc(100% - 2rem);
+            }
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <a href="#">View Products</a>
+        <a href="#">Gift Cards</a>
+        <a href="#">COVID FAQs</a>
+        <a href="#">Contact Us</a>
+        <a href="#">Jobs</a>
+    </header>
+    <nav class="nav">
+        <div class="dropdown">
+            <a href="#">Products</a>
+            <div class="dropdown-content">
+                <a href="#">Indoor Plants & Tropicals</a>
+                <a href="#">Hanging Baskets & Planters</a>
+                <a href="#">Rare & Imported Plants</a>
+                <a href="#">Succulents & Cacti</a>
+                <a href="#">Fruit Plants</a>
+                <a href="#">Seeds & Bulbs</a>
+                <a href="#">Pots & Plant Accessories</a>
+                <a href="#">Herbs & Vegetables</a>
+                <a href="#">Perennials</a>
+                <a href="#">Evergreens</a>
+                <a href="#">Shrubs & Rose Bushes</a>
+                <a href="#">Trees & Fruit Trees</a>
+                <a href="#">Soil, Mulch & Aggregates</a>
+                <a href="#">Fertilizer, Pesticide & Tools</a>
+                <a href="#">Garden Decor</a>
+                <a href="#">Bird & Animal Supplies</a>
+            </div>
+        </div>
+        <a href="#">Home</a>
+        <a href="#">About Us</a>
+        <a href="#">Services</a>
+        <a href="#">Contact</a>
+    </nav>
+    <section class="products">
+        <div class="product">
+            <img src="monstera.jpg" alt="Monstera Deliciosa Hanging Basket">
+            <h3>Monstera Deliciosa Hanging Basket</h3>
+            <p class="price">$32.99</p>
+            <p>In-Store</p>
+        </div>
+        <div class="product">
+            <img src="callisia.jpg" alt="Callisia Pink Lady Hanging Basket">
+            <h3>Callisia Pink Lady Hanging Basket</h3>
+            <p class="price">$29.99</p>
+            <p>In-Store</p>
+        </div>
+        <div class="product">
+            <img src="senecio.jpg" alt="Senecio Rowleyanus Hanging Basket">
+            <h3>Senecio Rowleyanus Hanging Basket</h3>
+            <p class="price">$25.99</p>
+            <p>In-Store</p>
+        </div>
+        <div class="product">
+            <img src="plant.jpg" alt="Plant Name">
+            <h3>Plant Name</h3>
+            <p class="price">$25.99</p>
+            <p>In-Store</p>
+        </div>
+        <!-- Add more products as needed -->
+    </section>
+    <footer class="footer">
+        <p>&copy; 2024 Ottawa Garden Centre. All rights reserved.</p>
+    </footer>
+</body>
+</html>
