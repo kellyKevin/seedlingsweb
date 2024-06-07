@@ -1,0 +1,57 @@
+body {
+    font-family: Arial, sans-serif;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background: linear-gradient(rgba(33, 190, 2, 0.7), rgba(0, 0, 0, 0.5)), url('images/bck.png') center/cover no-repeat;
+    position: relative;
+    min-height: 100vh;
+    width: 100%;
+    padding: 20px;
+}
+
+.container {
+    display: flex;
+    flex-wrap: wrap;
+    width: 100%;
+    max-width: 1200px;
+    justify-content: center;
+}
+
+.card {
+    flex-basis: 25%;
+    background-color: #ffffff;
+    border: 10px solid #1d9d00;
+    border-radius: 8px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+    text-align: left;
+    margin: 5px;
+    padding: 15px;
+}
+
+.card img {
+    width: 100%;
+    height: 50%;
+    object-fit: cover;
+    height: auto;
+    border-bottom: 1px solid #ddd;
+    border-radius: 10px;
+}
+
+.card-title {
+    font-size: 1.25em;
+    margin: 15px 0 10px;
+    color: #1d9d00;
+    font-weight: bold;
+}
+
+.card-price {
+    font-size: 1.1em;
+    color: #333;
+    margin-bottom: 15px;
+}
+.card-desc{
+    font-size: 10px;
+    color: black;
+}

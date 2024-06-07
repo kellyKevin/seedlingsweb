@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Display Data from Firestore</title>
+    <link rel="stylesheet" href="test.css">
+    <style>
+        /* Modal styles */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1;
+            padding-top: 60px;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgba(0, 0, 0, 0.4);
+        }
+
+        .modal-content {
+            background-color: #fefefe;
+            margin: auto;
+            padding: 20px;
+            border: 1px solid #888;
+            width: 80%;
+            max-width: 700px;
+        }
+
+        .close {
+            color: #aaa;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+        }
+
+        .close:hover,
+        .close:focus {
+            color: black;
+            text-decoration: none;
+            cursor: pointer;
+        }
+
+        #modal-images {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            justify-content: center;
+        }
+
+        #modal-images img {
+            max-width: 100%;
+            height: auto;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            padding: 5px;
+            background-color: #f9f9f9;
+            max-width: 30%;
+            flex-grow: 1;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="selector">
+        <label for="collection-select">Choose a collection:</label>
+        <select id="collection-select">
+            <option value="fruits">Fruits</option>
+            <option value="trees">Trees</option>
+        </select>
+        <button id="fetch-button">Fetch Data</button>
+    </div>
+
+    <div class="container" id="data-container">
+        <!-- Data will be inserted here -->
+    </div>
+
+    <!-- Modal for displaying additional images -->
+    <div id="imageModal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <div id="modal-images">
+                <!-- Images will be inserted here -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Firebase JS SDK -->
+    <script type="module">
+        // Import Firebase
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+        import { getAnalytics } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-analytics.js";
+        import { getFirestore, collection, getDocs } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+
+        // Your Firebase configuration
+        const firebaseConfig = {
+            apiKey: "AIzaSyBUZJDLktz7qBHUPj_XtPybxz3vkz5cYlQ",
+            authDomain: "seedlingsweb-b6e5e.firebaseapp.com",
+            projectId: "seedlingsweb-b6e5e",
+            storageBucket: "seedlingsweb-b6e5e.appspot.com",
+            messagingSenderId: "1042431917002",
+            appId: "1:1042431917002:web:ebea14cb0326379967ed33",
+            measurementId: "G-JVWHZPDJX7"
+        };
+
+        // Initialize Firebase
+        const app = initializeApp(firebaseConfig);
+        const analytics = getAnalytics(app);
+        const db = getFirestore(app);
+
+        // Function to create a card element
+        function createCard(docId, data) {
+            const imgSrc = data.imagetree1 || 'placeholder.jpg'; // Use a placeholder if imagetree1 is missing
+            const description = data.Description || 'No description available';
+            const price = data.price || 'Price not available';
+
+            return `
+                <div class="card">
+                    <img src="${imgSrc}" alt="${description}" onclick="showModal('${data.imagetree1}', '${data.imagetree2}', '${data.imagetree3}')">
+                    <div class="card-title">${docId}</div>
+                    <div class="card-desc">${description}</div>
+                    <div class="card-price">${price}</div>
+                </div>
+            `;
+        }
+
+        // Fetch and display data from the collection
+        async function displayCollection(collectionName, containerId) {
+            try {
+                console.log(`Fetching data from collection: ${collectionName}`);
+                const container = document.getElementById(containerId);
+                container.innerHTML = ''; // Clear existing content
+                const querySnapshot = await getDocs(collection(db, collectionName));
+                if (querySnapshot.empty) {
+                    container.innerHTML = `<p>No data found in the ${collectionName} collection.</p>`;
+                } else {
+                    querySnapshot.forEach((doc) => {
+                        console.log(`Document ID: ${doc.id}, Data:`, doc.data()); // Log fetched data
+                        container.innerHTML += createCard(doc.id, doc.data());
+                    });
+                }
+                console.log(`Data from ${collectionName} displayed successfully.`);
+            } catch (error) {
+                console.error(`Error fetching data from ${collectionName}:`, error);
+            }
+        }
+
+        // Event listener for the fetch button
+        document.getElementById('fetch-button').addEventListener('click', () => {
+            const collectionSelect = document.getElementById('collection-select');
+            const selectedCollection = collectionSelect.value;
+            displayCollection(selectedCollection, 'data-container');
+        });
+
+        // Initially display the first collection
+        displayCollection('fruits ', 'data-container');
+
+        // Function to show the modal with images
+        window.showModal = function (img1 = 'placeholder.jpg', img2 = 'placeholder.jpg', img3 = 'placeholder.jpg') {
+            const modal = document.getElementById('imageModal');
+            const modalImages = document.getElementById('modal-images');
+            modalImages.innerHTML = `
+                <img src="${img1}" alt="Image 1">
+                <img src="${img2}" alt="Image 2">
+                <img src="${img3}" alt="Image 3">
+            `;
+            modal.style.display = "block";
+        };
+
+        // Get the modal
+        const modal = document.getElementById('imageModal');
+
+        // Get the <span> element that closes the modal
+        const span = document.getElementsByClassName("close")[0];
+
+        // When the user clicks on <span> (x), close the modal
+        span.onclick = function () {
+            modal.style.display = "none";
+        }
+
+        // When the user clicks anywhere outside of the modal, close it
+        window.onclick = function (event) {
+            if (event.target == modal) {
+                modal.style.display = "none";
+            }
+        }
+    </script>
+</body>
+
+</html>
