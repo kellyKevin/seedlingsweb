@@ -65,8 +65,9 @@
     <div class="selector">
         <label for="collection-select">Choose a collection:</label>
         <select id="collection-select">
-            <option value="fruits">Fruits</option>
+            <option value="fruits ">Fruits</option>
             <option value="trees">Trees</option>
+            <option value="veges">Vegetables</option>
         </select>
         <button id="fetch-button">Fetch Data</button>
     </div>
@@ -153,7 +154,9 @@
         });
 
         // Initially display the first collection
-        displayCollection('fruits ', 'data-container');
+        displayCollection("fruits ", "data-container");
+        displayCollection("trees", "data-container");
+        displayCollection("veges", "data-container");
 
         // Function to show the modal with images
         window.showModal = function (img1 = 'placeholder.jpg', img2 = 'placeholder.jpg', img3 = 'placeholder.jpg') {
