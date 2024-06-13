@@ -64,13 +64,12 @@ body {
 
 /* Card price */
 .card-price {
-    background-color: #00c853;
+    background-color: #95a89d2a;
     border-radius: 5px;
-    color: #fff;
+    color: #00000096;
     font-size: 1em;
     margin: 15px auto;
-    padding: 10px;
-    width: 80%;
+    padding: 10px 100px;
 }
 
 /* Media queries for responsiveness */
