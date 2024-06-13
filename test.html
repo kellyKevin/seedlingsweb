@@ -6,23 +6,91 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Display Data from Firestore</title>
     <link rel="stylesheet" href="test.css">
+    <style>
+        .modal {
+            display: none;
+            /* Initially hide the modal */
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            overflow: auto;
+            transition: opacity 0.3s ease;
+        }
+
+        .modal.active {
+            display: block;
+            /* Display the modal when it has the 'active' class */
+        }
+
+        .modal-content {
+            background-color: #fff;
+            margin: 5% auto;
+            /* Center the modal vertically and horizontally */
+            padding: 20px;
+            max-width: 90%;
+            max-height: 90%;
+            overflow: auto;
+            border-radius: 8px;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.2);
+        }
+
+        #modal-images {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            justify-items: center;
+            align-items: center;
+        }
+
+        #modal-images img {
+            width: 100%;
+            height: auto;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            transition: transform 0.2s ease;
+            cursor: pointer;
+        }
+
+        #modal-images img:hover {
+            transform: scale(1.05);
+        }
+    </style>
 </head>
 
 <body>
-    <div class="container" id="fruits-container">
-        <!-- Fruits data will be inserted here -->
+    <div class="selector">
+        <label for="collection-select">Choose a collection:</label>
+        <select id="collection-select">
+            <option value="fruits">Fruits</option>
+            <option value="trees">Trees</option>
+        </select>
+        <button id="fetch-button">Fetch Data</button>
     </div>
-    <div class="container" id="trees-container">
-        <!-- Trees data will be inserted here -->
+
+    <div class="container" id="data-container">
+        <!-- Data will be inserted here -->
+    </div>
+
+    <!-- Modal for displaying additional images -->
+    <div id="imageModal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <div id="modal-images">
+                <!-- Images will be inserted here -->
+            </div>
+        </div>
     </div>
 
     <!-- Firebase JS SDK -->
     <script type="module">
         // Import Firebase
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/9.6.0/firebase-app.js";
-        import { getAnalytics } from "https://www.gstatic.com/firebasejs/9.6.0/firebase-analytics.js";
-        import { getFirestore, collection, getDocs } from "https://www.gstatic.com/firebasejs/9.6.0/firebase-firestore.js";
-        import { getStorage } from "https://www.gstatic.com/firebasejs/9.6.0/firebase-storage.js";
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+        import { getAnalytics } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-analytics.js";
+        import { getFirestore, collection, getDocs } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
         // Your Firebase configuration
         const firebaseConfig = {
@@ -39,57 +107,24 @@
         const app = initializeApp(firebaseConfig);
         const analytics = getAnalytics(app);
         const db = getFirestore(app);
-        const storage = getStorage(app);
 
         // Function to create a card element
         function createCard(docId, data) {
+            const imgSrc = data.imagetree1 || 'placeholder.jpg'; // Use a placeholder if imagetree1 is missing
+            const description = data.Description || 'No description available';
+            const price = data.price || 'Price not available';
+
             return `
-                <div class="card" onclick="fetchAndDisplayImages('${docId}', '${data.imagetree1}', '${data.imagetree2}', '${data.imagetree3}')">
-                    <img src="${data.imagetree1}" alt="${data.Description}">
+                <div class="card">
+                    <img src="${imgSrc}" alt="${description}" onclick="showModal('${data.imagetree1}', '${data.imagetree2}', '${data.imagetree3}')">
                     <div class="card-title">${docId}</div>
-                    <div class="card-desc">${data.Description}</div>
-                    <div class="card-price">${data.price}</div>
+                    <div class="card-desc">${description}</div>
+                    <div class="card-price">${price}</div>
                 </div>
             `;
         }
 
-        // Function to fetch and display images from Firebase Storage
-        async function fetchAndDisplayImages(docId, image1, image2, image3) {
-            try {
-                const promises = [];
-
-                // Function to fetch each image and append to the document
-                async function fetchImage(imageUrl) {
-                    const ref = storage.refFromURL(imageUrl);
-                    const url = await ref.getDownloadURL();
-                    const img = new Image();
-                    img.src = url;
-                    img.alt = docId; // Use document ID as alt text
-                    img.classList.add('tree-image'); // Add a class for styling
-                    document.body.appendChild(img); // Append image to body (you can append to a specific container)
-                }
-
-                // Push each image fetching promise into promises array
-                if (image1) {
-                    promises.push(fetchImage(image1));
-                }
-                if (image2) {
-                    promises.push(fetchImage(image2));
-                }
-                if (image3) {
-                    promises.push(fetchImage(image3));
-                }
-
-                // Wait for all images to be fetched
-                await Promise.all(promises);
-
-                console.log(`Images for ${docId} fetched successfully.`);
-            } catch (error) {
-                console.error(`Error fetching images for ${docId}:`, error);
-            }
-        }
-
-        // Function to display data from a Firestore collection
+        // Fetch and display data from the collection
         async function displayCollection(collectionName, containerId) {
             try {
                 console.log(`Fetching data from collection: ${collectionName}`);
@@ -100,6 +135,7 @@
                     container.innerHTML = `<p>No data found in the ${collectionName} collection.</p>`;
                 } else {
                     querySnapshot.forEach((doc) => {
+                        console.log(`Document ID: ${doc.id}, Data:`, doc.data()); // Log fetched data
                         container.innerHTML += createCard(doc.id, doc.data());
                     });
                 }
@@ -109,9 +145,45 @@
             }
         }
 
-        // Display both collections
-        displayCollection("fruits ", "fruits-container");
-        displayCollection("trees", "trees-container");
+        // Event listener for the fetch button
+        document.getElementById('fetch-button').addEventListener('click', () => {
+            const collectionSelect = document.getElementById('collection-select');
+            const selectedCollection = collectionSelect.value;
+            displayCollection(selectedCollection, 'data-container');
+        });
+
+        // Initially display the first collection
+        displayCollection('fruits ', 'data-container');
+
+        // Function to show the modal with images
+        window.showModal = function (img1 = 'placeholder.jpg', img2 = 'placeholder.jpg', img3 = 'placeholder.jpg') {
+            const modal = document.getElementById('imageModal');
+            const modalImages = document.getElementById('modal-images');
+            modalImages.innerHTML = `
+                <img src="${img1}" alt="Image 1">
+                <img src="${img2}" alt="Image 2">
+                <img src="${img3}" alt="Image 3">
+            `;
+            modal.style.display = "block";
+        };
+
+        // Get the modal
+        const modal = document.getElementById('imageModal');
+
+        // Get the <span> element that closes the modal
+        const span = document.getElementsByClassName("close")[0];
+
+        // When the user clicks on <span> (x), close the modal
+        span.onclick = function () {
+            modal.style.display = "none";
+        }
+
+        // When the user clicks anywhere outside of the modal, close it
+        window.onclick = function (event) {
+            if (event.target == modal) {
+                modal.style.display = "none";
+            }
+        }
     </script>
 </body>
 
