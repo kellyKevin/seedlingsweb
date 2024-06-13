@@ -19,9 +19,10 @@
     <!-- Firebase JS SDK -->
     <script type="module">
         // Import Firebase
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
-        import { getAnalytics } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-analytics.js";
-        import { getFirestore, collection, getDocs } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/9.6.0/firebase-app.js";
+        import { getAnalytics } from "https://www.gstatic.com/firebasejs/9.6.0/firebase-analytics.js";
+        import { getFirestore, collection, getDocs } from "https://www.gstatic.com/firebasejs/9.6.0/firebase-firestore.js";
+        import { getStorage } from "https://www.gstatic.com/firebasejs/9.6.0/firebase-storage.js";
 
         // Your Firebase configuration
         const firebaseConfig = {
@@ -38,11 +39,12 @@
         const app = initializeApp(firebaseConfig);
         const analytics = getAnalytics(app);
         const db = getFirestore(app);
+        const storage = getStorage(app);
 
         // Function to create a card element
         function createCard(docId, data) {
             return `
-                <div class="card">
+                <div class="card" onclick="fetchAndDisplayImages('${docId}', '${data.imagetree1}', '${data.imagetree2}', '${data.imagetree3}')">
                     <img src="${data.imagetree1}" alt="${data.Description}">
                     <div class="card-title">${docId}</div>
                     <div class="card-desc">${data.Description}</div>
@@ -51,7 +53,43 @@
             `;
         }
 
-        // Fetch and display data from the collection
+        // Function to fetch and display images from Firebase Storage
+        async function fetchAndDisplayImages(docId, image1, image2, image3) {
+            try {
+                const promises = [];
+
+                // Function to fetch each image and append to the document
+                async function fetchImage(imageUrl) {
+                    const ref = storage.refFromURL(imageUrl);
+                    const url = await ref.getDownloadURL();
+                    const img = new Image();
+                    img.src = url;
+                    img.alt = docId; // Use document ID as alt text
+                    img.classList.add('tree-image'); // Add a class for styling
+                    document.body.appendChild(img); // Append image to body (you can append to a specific container)
+                }
+
+                // Push each image fetching promise into promises array
+                if (image1) {
+                    promises.push(fetchImage(image1));
+                }
+                if (image2) {
+                    promises.push(fetchImage(image2));
+                }
+                if (image3) {
+                    promises.push(fetchImage(image3));
+                }
+
+                // Wait for all images to be fetched
+                await Promise.all(promises);
+
+                console.log(`Images for ${docId} fetched successfully.`);
+            } catch (error) {
+                console.error(`Error fetching images for ${docId}:`, error);
+            }
+        }
+
+        // Function to display data from a Firestore collection
         async function displayCollection(collectionName, containerId) {
             try {
                 console.log(`Fetching data from collection: ${collectionName}`);
@@ -62,7 +100,6 @@
                     container.innerHTML = `<p>No data found in the ${collectionName} collection.</p>`;
                 } else {
                     querySnapshot.forEach((doc) => {
-                        console.log(`Document ID: ${doc.id}, Data:`, doc.data()); // Log fetched data
                         container.innerHTML += createCard(doc.id, doc.data());
                     });
                 }

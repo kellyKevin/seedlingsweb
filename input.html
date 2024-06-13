@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Add Data to Firestore</title>
+    <link rel="stylesheet" href="test.css">
+</head>
+
+<body>
+    <h1>Add New Data</h1>
+    <form id="addDataForm">
+        <label for="imagetree1">Image URL:</label>
+        <input type="text" id="imagetree1" name="imagetree1" required><br><br>
+
+        <label for="description">Description:</label>
+        <input type="text" id="description" name="description" required><br><br>
+
+        <label for="price">Price:</label>
+        <input type="number" id="price" name="price" required><br><br>
+
+        <button type="submit">Add Data</button>
+    </form>
+
+    <!-- Firebase JS SDK -->
+    <script type="module">
+        // Import Firebase
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+        import { getAnalytics } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-analytics.js";
+        import { getFirestore, collection, addDoc } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+
+        // Your Firebase configuration
+        const firebaseConfig = {
+            apiKey: "AIzaSyBUZJDLktz7qBHUPj_XtPybxz3vkz5cYlQ",
+            authDomain: "seedlingsweb-b6e5e.firebaseapp.com",
+            projectId: "seedlingsweb-b6e5e",
+            storageBucket: "seedlingsweb-b6e5e.appspot.com",
+            messagingSenderId: "1042431917002",
+            appId: "1:1042431917002:web:ebea14cb0326379967ed33",
+            measurementId: "G-JVWHZPDJX7"
+        };
+
+        // Initialize Firebase
+        const app = initializeApp(firebaseConfig);
+        const analytics = getAnalytics(app);
+        const db = getFirestore(app);
+
+        // Function to add data to Firestore
+        async function addData(event) {
+            event.preventDefault(); // Prevent default form submission
+            const form = event.target;
+            const formData = new FormData(form);
+            const data = Object.fromEntries(formData.entries());
+
+            try {
+                // Add data to Firestore
+                const docRef = await addDoc(collection(db, "your_collection_name"), data);
+                console.log("Document written with ID: ", docRef.id);
+
+                // Reset form fields after successful submission
+                form.reset();
+            } catch (error) {
+                console.error("Error adding document: ", error);
+            }
+        }
+
+        // Add event listener to the form
+        const form = document.getElementById("addDataForm");
+        form.addEventListener("submit", addData);
+    </script>
+</body>
+
+</html>

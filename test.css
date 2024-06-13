@@ -1,57 +1,88 @@
-body {
-    font-family: Arial, sans-serif;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    background: linear-gradient(rgba(33, 190, 2, 0.7), rgba(0, 0, 0, 0.5)), url('images/bck.png') center/cover no-repeat;
-    position: relative;
-    min-height: 100vh;
-    width: 100%;
-    padding: 20px;
+/* Reset some default styles */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
 }
 
+body {
+    font-family: 'Arial', sans-serif;
+    background-color: #f4f4f9;
+    color: #333;
+    line-height: 1.6;
+}
+
+/* Container for the cards */
 .container {
     display: flex;
     flex-wrap: wrap;
-    width: 100%;
-    max-width: 1200px;
     justify-content: center;
+    margin: 20px auto;
+    max-width: 1200px;
 }
 
+/* Card style */
 .card {
-    flex-basis: 25%;
-    background-color: #ffffff;
-    border: 10px solid #1d9d00;
-    border-radius: 8px;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-    overflow: hidden;
-    text-align: left;
-    margin: 5px;
-    padding: 15px;
-}
-
-.card img {
-    width: 100%;
-    height: 50%;
-    object-fit: cover;
-    height: auto;
-    border-bottom: 1px solid #ddd;
+    background-color: #fff;
+    border: 1px solid #e0e0e0;
     border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    margin: 15px;
+    overflow: hidden;
+    transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+    width: calc(33.333% - 30px); /* 3 cards per row with margin */
+    max-width: 300px;
+    text-align: center;
 }
 
+.card:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+}
+
+/* Image inside the card */
+.card img {
+    border-bottom: 1px solid #e0e0e0;
+    max-height: 200px;
+    object-fit: cover;
+    width: 100%;
+}
+
+/* Card title */
 .card-title {
-    font-size: 1.25em;
-    margin: 15px 0 10px;
-    color: #1d9d00;
+    font-size: 1.2em;
     font-weight: bold;
+    margin: 15px 0;
 }
 
+/* Card description */
+.card-desc {
+    color: #666;
+    font-size: 0.9em;
+    margin: 0 15px 15px;
+}
+
+/* Card price */
 .card-price {
-    font-size: 1.1em;
-    color: #333;
-    margin-bottom: 15px;
+    background-color: #00c853;
+    border-radius: 5px;
+    color: #fff;
+    font-size: 1em;
+    margin: 15px auto;
+    padding: 10px;
+    width: 80%;
 }
-.card-desc{
-    font-size: 10px;
-    color: black;
+
+/* Media queries for responsiveness */
+@media (max-width: 992px) {
+    .card {
+        width: calc(50% - 30px); /* 2 cards per row */
+    }
 }
+
+@media (max-width: 768px) {
+    .card {
+        width: calc(100% - 30px); /* 1 card per row */
+    }
+}
+
