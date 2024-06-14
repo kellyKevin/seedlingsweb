@@ -52,7 +52,6 @@
 <body>
 
     <div class="selector">
-        <button id="open-cart">View Cart</button>
         <a href="cart.html">View Cart</a>
         <label for="collection-select">Choose a collection:</label>
         <select id="collection-select">
@@ -127,7 +126,7 @@
                     <div class="card-title">${docId}</div>
                     <div class="card-desc">${description}</div>
                     <div class="card-price">ksh${price.toFixed(2)}</div>
-                    <button onclick="addToCart('${docId}', '${description}', ${price}, '${imgSrc}')">Add to Cart</button>
+                    <button onclick="addToCart('${docId}', '${docId}', ${price}, '${imgSrc}')">Add to Cart</button>
                 </div>
             `;
         }
@@ -184,63 +183,64 @@
         };
 
         // Function to add item to cart
-        window.addToCart = function (itemId, itemName, itemPrice, itemImage) {
-            const item = {
-                id: itemId,
-                name: itemName,
-                price: itemPrice,
-                image: itemImage,
-                quantity: 1 // Initial quantity
-            };
+        // Function to add item to cart
+window.addToCart = function (itemId, itemName, itemPrice, itemImage) {
+    const item = {
+        id: itemId,
+        price: itemPrice,
+        image: itemImage,
+        quantity: 1 // Initial quantity
+    };
 
-            // Check if item already exists in cart
-            const existingItem = cart.find(i => i.id === itemId);
-            if (existingItem) {
-                existingItem.quantity++;
-            } else {
-                cart.push(item);
-            }
+    // Check if item already exists in cart
+    const existingItem = cart.find(i => i.id === itemId);
+    if (existingItem) {
+        existingItem.quantity++;
+    } else {
+        cart.push(item);
+    }
 
-            // Save updated cart to localStorage
-            localStorage.setItem('cart', JSON.stringify(cart));
+    // Save updated cart to localStorage
+    localStorage.setItem('cart', JSON.stringify(cart));
 
-            // Update cart display
-            displayCart();
-        };
+    // Update cart display
+    displayCart();
+};
 
-        // Function to display cart items and calculate total
-        function displayCart() {
-            const cartContainer = document.getElementById('cart-items');
-            const cartTotal = document.getElementById('cart-total');
-            let total = 0;
+// Function to display cart items and calculate total
+function displayCart() {
+    const cartContainer = document.getElementById('cart-items');
+    const cartTotal = document.getElementById('cart-total');
+    let total = 0;
 
-            // Clear previous cart items
-            cartContainer.innerHTML = '';
+    // Clear previous cart items
+    cartContainer.innerHTML = '';
 
-            // Display each item in the cart
-            cart.forEach(item => {
-                const itemTotal = item.price * item.quantity;
-                total += itemTotal;
+    // Display each item in the cart
+    cart.forEach(item => {
+        const itemTotal = item.price * item.quantity;
+        total += itemTotal;
 
-                // HTML for displaying cart item
-                const cartItemHTML = `
-                    <div class="cart-item">
-                        <img src="${item.image}" alt="${item.name}">
-                        <div>
-                            <h4>${item.name}</h4>
-                            <p>Price: ksh${item.price.toFixed(2)} | Quantity: ${item.quantity}</p>
-                        </div>
-                        <div class="quantity">
-                            <button class="btn" onclick="removeFromCart('${item.id}')">Remove</button>
-                        </div>
-                    </div>
-                `;
-                cartContainer.innerHTML += cartItemHTML;
-            });
+        // HTML for displaying cart item
+        const cartItemHTML = `
+            <div class="cart-item">
+                <img src="${item.image}" alt="${item.name}">
+                <div>
+                    <h4>${item.name}</h4>
+                    <p>Price: ksh${item.price.toFixed(2)} | Quantity: ${item.quantity}</p>
+                </div>
+                <div class="quantity">
+                    <button class="btn" onclick="removeFromCart('${item.id}')">Remove</button>
+                </div>
+            </div>
+        `;
+        cartContainer.innerHTML += cartItemHTML;
+    });
 
-            // Display total in cart
-            cartTotal.textContent = `Total: ksh${total.toFixed(2)}`;
-        }
+    // Display total in cart
+    cartTotal.textContent = `Total: ksh${total.toFixed(2)}`;
+}
+
 
         // Function to remove item from cart
         window.removeFromCart = function (itemId) {
@@ -249,20 +249,15 @@
             if (index !== -1) {
                 cart[index].quantity--;
 
-                // Remove item if quantity reaches zero
                 if (cart[index].quantity <= 0) {
                     cart.splice(index, 1);
                 }
 
-                // Save updated cart to localStorage
                 localStorage.setItem('cart', JSON.stringify(cart));
-
-                // Update cart display
                 displayCart();
             }
         };
 
-        // Display existing cart items on page load
         displayCart();
 
         // Modal and button elements for cart
@@ -270,18 +265,15 @@
         const openCartBtn = document.getElementById('open-cart');
         const closeCartBtn = document.getElementById('close-cart');
 
-        // Function to open cart modal
         openCartBtn.onclick = function () {
             cartModal.style.display = "block";
-            displayCart(); // Ensure cart content is updated
+            displayCart();
         }
 
-        // Function to close cart modal
         closeCartBtn.onclick = function () {
             cartModal.style.display = "none";
         }
 
-        // Close modal when clicking outside of it
         window.onclick = function (event) {
             if (event.target == cartModal) {
                 cartModal.style.display = "none";
@@ -291,4 +283,3 @@
 </body>
 
 </html>
-

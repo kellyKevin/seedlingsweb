@@ -22,6 +22,26 @@
             padding: 0 20px;
         }
 
+        h2 {
+            text-align: center;
+            color: #333;
+        }
+
+        h3 {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        h3 a {
+            text-decoration: none;
+            color: #0cd527;
+            transition: color 0.3s;
+        }
+
+        h3 a:hover {
+            color: #0cd527cc;
+        }
+
         /* Cart styles */
         .cart {
             background: #fff;
@@ -65,19 +85,31 @@
         .cart-item-quantity {
             display: flex;
             align-items: center;
+            margin-left: 10px;
         }
 
         .cart-item-quantity input {
-            width: 40px;
+            width: 50px;
             text-align: center;
-            margin: 0 10px;
+            margin-right: 10px;
             padding: 5px;
             border: 1px solid #ccc;
             border-radius: 4px;
+            background: #f2f2f2;
         }
 
-        .cart-item-remove {
-            margin-left: auto;
+        .cart-item-remove button {
+            background: #e74c3c;
+            color: #fff;
+            border: none;
+            padding: 5px 10px;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        .cart-item-remove button:hover {
+            background: #c0392b;
         }
 
         .cart-total {
@@ -90,13 +122,13 @@
         .checkout-btn {
             display: block;
             width: 100%;
-            padding: 10px;
+            padding: 15px;
             background-color: #0cd527;
             color: #fff;
             border: none;
             border-radius: 5px;
             text-align: center;
-            font-size: 16px;
+            font-size: 18px;
             cursor: pointer;
             transition: background-color 0.3s;
         }
@@ -112,8 +144,7 @@
             }
 
             .cart-item-quantity input {
-                width: 30px;
-                font-size: 12px;
+                width: 40px;
             }
         }
 
@@ -131,8 +162,12 @@
             }
 
             .cart-item-quantity input {
-                width: 25px;
-                font-size: 10px;
+                width: 30px;
+            }
+
+            .cart-item-remove button {
+                padding: 5px;
+                font-size: 12px;
             }
         }
     </style>
@@ -142,7 +177,7 @@
 
     <div class="container">
         <h2>Your Shopping Cart</h2>
-    </div><h3><a href="new.html">Back to Shop</a></h3></div>
+        <h3><a href="new.html">Back to Shop</a></h3>
 
         <div class="cart" id="cart-items">
             <!-- Cart items will be dynamically inserted here -->
@@ -192,7 +227,7 @@
                             <input type="number" min="1" value="${item.quantity}" onchange="updateQuantity('${item.id}', this.value)">
                         </div>
                         <div class="cart-item-remove">
-                            <button class="btn" onclick="removeFromCart('${item.id}')">Remove</button>
+                            <button onclick="removeFromCart('${item.id}')">Remove</button>
                         </div>
                     </div>
                 `;
