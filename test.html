@@ -8,12 +8,51 @@
     <link rel="stylesheet" href="test.css">
     <style>
         /* Add your CSS styles here */
+
+        /* Modal container, hidden by default */
+        .modal {
+            display: none; /* Hidden by default */
+            position: fixed; /* Stay in place */
+            z-index: 1; /* Sit on top */
+            left: 0;
+            top: 0;
+            width: 100%; /* Full width */
+            height: 100%; /* Full height */
+            overflow: auto; /* Enable scroll if needed */
+            background-color: rgb(0, 0, 0); /* Fallback color */
+            background-color: rgba(0, 0, 0, 0.4); /* Black w/ opacity */
+        }
+
+        /* Modal content */
+        .modal-content {
+            background-color: #fefefe;
+            margin: 15% auto; /* 15% from the top and centered */
+            padding: 20px;
+            border: 1px solid #888;
+            width: 80%; /* Could be more or less, depending on screen size */
+        }
+
+        /* Close button */
+        .close {
+            color: #aaa;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+        }
+
+        .close:hover,
+        .close:focus {
+            color: black;
+            text-decoration: none;
+            cursor: pointer;
+        }
     </style>
 </head>
 
 <body>
 
     <div class="selector">
+        <button id="open-cart">View Cart</button>
         <a href="cart.html">View Cart</a>
         <label for="collection-select">Choose a collection:</label>
         <select id="collection-select">
@@ -28,19 +67,22 @@
         <!-- Data will be inserted here -->
     </div>
 
-    <!-- Shopping cart section -->
-    <div class="cart" id="cart">
-        <h3>Shopping Cart</h3>
-        <div id="cart-items">
-            <!-- Cart items will be inserted here -->
+    <!-- Modal for Shopping Cart -->
+    <div id="cartModal" class="modal">
+        <div class="modal-content">
+            <span class="close" id="close-cart">&times;</span>
+            <h3>Shopping Cart</h3>
+            <div id="cart-items">
+                <!-- Cart items will be inserted here -->
+            </div>
+            <div class="cart-total" id="cart-total">Total: ksh0.00</div>
         </div>
-        <div class="cart-total" id="cart-total">Total: ksh0.00</div>
     </div>
 
     <!-- Modal for displaying additional images -->
     <div id="imageModal" class="modal">
         <div class="modal-content">
-            <span class="close">&times;</span>
+            <span class="close" id="close-image">&times;</span>
             <div id="modal-images">
                 <!-- Images will be inserted here -->
             </div>
@@ -52,7 +94,7 @@
         // Import Firebase
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
         import { getAnalytics } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-analytics.js";
-        import { getFirestore, collection, getDocs, doc, setDoc } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+        import { getFirestore, collection, getDocs } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
         // Your Firebase configuration
         const firebaseConfig = {
@@ -64,7 +106,6 @@
             appId: "1:1042431917002:web:ebea14cb0326379967ed33",
             measurementId: "G-JVWHZPDJX7"
         };
-
 
         // Initialize Firebase
         const app = initializeApp(firebaseConfig);
@@ -131,8 +172,8 @@
             modal.classList.add('active');
         };
 
-        // Close the modal
-        document.querySelector('.close').onclick = function () {
+        // Close the image modal
+        document.getElementById('close-image').onclick = function () {
             document.getElementById('imageModal').classList.remove('active');
         };
 
@@ -165,9 +206,6 @@
 
             // Update cart display
             displayCart();
-
-            // Save cart to Firestore
-            saveCartToFirestore();
         };
 
         // Function to display cart items and calculate total
@@ -221,32 +259,34 @@
 
                 // Update cart display
                 displayCart();
-
-                // Save cart to Firestore
-                saveCartToFirestore();
             }
         };
-
-        // Function to save cart to Firestore
-        async function saveCartToFirestore() {
-            try {
-                // Check if user is authenticated (you need to implement authentication)
-                const userId = "user123"; // Replace with actual user ID or use Firebase Authentication
-
-                // Define the Firestore document reference
-                const cartDocRef = doc(db, 'carts', userId);
-
-                // Set the cart data in Firestore
-                await setDoc(cartDocRef, { cart });
-                console.log('Cart saved to Firestore:', cart);
-            } catch (error) {
-                console.error('Error saving cart to Firestore:', error);
-            }
-        }
 
         // Display existing cart items on page load
         displayCart();
 
+        // Modal and button elements for cart
+        const cartModal = document.getElementById('cartModal');
+        const openCartBtn = document.getElementById('open-cart');
+        const closeCartBtn = document.getElementById('close-cart');
+
+        // Function to open cart modal
+        openCartBtn.onclick = function () {
+            cartModal.style.display = "block";
+            displayCart(); // Ensure cart content is updated
+        }
+
+        // Function to close cart modal
+        closeCartBtn.onclick = function () {
+            cartModal.style.display = "none";
+        }
+
+        // Close modal when clicking outside of it
+        window.onclick = function (event) {
+            if (event.target == cartModal) {
+                cartModal.style.display = "none";
+            }
+        }
     </script>
 </body>
 

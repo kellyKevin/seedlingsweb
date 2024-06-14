@@ -8,155 +8,31 @@
     <link rel="stylesheet" href="test.css">
     <style>
         /* Add your CSS styles here */
-        /* Add your CSS styles here */
-        body {
-            font-family: Arial, sans-serif;
-            margin: 20px;
-            padding: 0;
-            background-color: #f5f5f5;
-        }
 
-        .selector {
-            margin-bottom: 20px;
-        }
-
-        .container {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 10px;
-        }
-
-        .card {
-            background: #fff;
-            border: 1px solid #ccc;
-            border-radius: 8px;
-            padding: 16px;
-            width: 300px;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-            transition: transform 0.2s;
-        }
-
-        .card img {
-            width: 100%;
-            border-radius: 8px;
-        }
-
-        .card-title {
-            font-size: 18px;
-            font-weight: bold;
-            margin: 8px 0;
-        }
-
-        .card-desc {
-            color: #555;
-            margin-bottom: 8px;
-        }
-
-        .card-price {
-            font-size: 16px;
-            font-weight: bold;
-            margin-bottom: 12px;
-        }
-
-        .card button {
-            background-color: #28a745;
-            color: white;
-            padding: 8px 16px;
-            border: none;
-            border-radius: 4px;
-            cursor: pointer;
-        }
-
-        .card button:hover {
-            background-color: #218838;
-        }
-
-        .cart {
-            background: #fff;
-            border: 1px solid #ccc;
-            border-radius: 8px;
-            padding: 16px;
-            width: 350px;
-            position: fixed;
-            top: 20px;
-            right: 20px;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-        }
-
-        .cart h3 {
-            margin-top: 0;
-        }
-
-        .cart-item {
-            display: flex;
-            margin-bottom: 12px;
-            align-items: center;
-        }
-
-        .cart-item img {
-            width: 50px;
-            height: 50px;
-            border-radius: 4px;
-            margin-right: 12px;
-        }
-
-        .cart-item div {
-            flex: 1;
-        }
-
-        .cart-item h4 {
-            margin: 0;
-            font-size: 16px;
-        }
-
-        .cart-item p {
-            margin: 4px 0;
-            color: #555;
-        }
-
-        .quantity button {
-            background-color: #35dc59;
-            color: white;
-            padding: 4px 8px;
-            border: none;
-            border-radius: 4px;
-            cursor: pointer;
-        }
-
-        .quantity button:hover {
-            background-color: #23c826;
-        }
-
-        .cart-total {
-            font-size: 18px;
-            font-weight: bold;
-            text-align: right;
-        }
-
-        /* Modal styles */
+        /* Modal container, hidden by default */
         .modal {
-            display: none;
-            position: fixed;
-            z-index: 1;
+            display: none; /* Hidden by default */
+            position: fixed; /* Stay in place */
+            z-index: 1; /* Sit on top */
             left: 0;
             top: 0;
-            width: 100%;
-            height: 100%;
-            overflow: auto;
-            background-color: rgba(0, 0, 0, 0.5);
-            padding-top: 60px;
+            width: 100%; /* Full width */
+            height: 100%; /* Full height */
+            overflow: auto; /* Enable scroll if needed */
+            background-color: rgb(0, 0, 0); /* Fallback color */
+            background-color: rgba(0, 0, 0, 0.4); /* Black w/ opacity */
         }
 
+        /* Modal content */
         .modal-content {
-            background-color: #fff;
-            margin: 5% auto;
+            background-color: #fefefe;
+            margin: 15% auto; /* 15% from the top and centered */
             padding: 20px;
             border: 1px solid #888;
-            width: 80%;
-            max-width: 600px;
-            border-radius: 8px;
+            width: 80%; /* Could be more or less, depending on screen size */
         }
 
+        /* Close button */
         .close {
             color: #aaa;
             float: right;
@@ -166,14 +42,9 @@
 
         .close:hover,
         .close:focus {
-            color: #000;
+            color: black;
             text-decoration: none;
             cursor: pointer;
-        }
-
-        #modal-images img {
-            width: 100%;
-            margin-bottom: 10px;
         }
     </style>
 </head>
@@ -181,6 +52,7 @@
 <body>
 
     <div class="selector">
+        <button id="open-cart">View Cart</button>
         <a href="cart.html">View Cart</a>
         <label for="collection-select">Choose a collection:</label>
         <select id="collection-select">
@@ -195,19 +67,22 @@
         <!-- Data will be inserted here -->
     </div>
 
-    <!-- Shopping cart section -->
-    <div class="cart" id="cart">
-        <h3>Shopping Cart</h3>
-        <div id="cart-items">
-            <!-- Cart items will be inserted here -->
+    <!-- Modal for Shopping Cart -->
+    <div id="cartModal" class="modal">
+        <div class="modal-content">
+            <span class="close" id="close-cart">&times;</span>
+            <h3>Shopping Cart</h3>
+            <div id="cart-items">
+                <!-- Cart items will be inserted here -->
+            </div>
+            <div class="cart-total" id="cart-total">Total: ksh0.00</div>
         </div>
-        <div class="cart-total" id="cart-total">Total: ksh0.00</div>
     </div>
 
     <!-- Modal for displaying additional images -->
     <div id="imageModal" class="modal">
         <div class="modal-content">
-            <span class="close">&times;</span>
+            <span class="close" id="close-image">&times;</span>
             <div id="modal-images">
                 <!-- Images will be inserted here -->
             </div>
@@ -297,8 +172,8 @@
             modal.classList.add('active');
         };
 
-        // Close the modal
-        document.querySelector('.close').onclick = function () {
+        // Close the image modal
+        document.getElementById('close-image').onclick = function () {
             document.getElementById('imageModal').classList.remove('active');
         };
 
@@ -312,6 +187,7 @@
         window.addToCart = function (itemId, itemName, itemPrice, itemImage) {
             const item = {
                 id: itemId,
+                name: itemName,
                 price: itemPrice,
                 image: itemImage,
                 quantity: 1 // Initial quantity
@@ -389,7 +265,30 @@
         // Display existing cart items on page load
         displayCart();
 
+        // Modal and button elements for cart
+        const cartModal = document.getElementById('cartModal');
+        const openCartBtn = document.getElementById('open-cart');
+        const closeCartBtn = document.getElementById('close-cart');
+
+        // Function to open cart modal
+        openCartBtn.onclick = function () {
+            cartModal.style.display = "block";
+            displayCart(); // Ensure cart content is updated
+        }
+
+        // Function to close cart modal
+        closeCartBtn.onclick = function () {
+            cartModal.style.display = "none";
+        }
+
+        // Close modal when clicking outside of it
+        window.onclick = function (event) {
+            if (event.target == cartModal) {
+                cartModal.style.display = "none";
+            }
+        }
     </script>
 </body>
 
 </html>
+
