@@ -7,7 +7,7 @@
     <title>Display Data from Firestore</title>
     <link rel="stylesheet" href="test.css">
     <style>
-        /* Add your CSS styles here */
+        /* Add any custom styles here */
     </style>
 </head>
 
@@ -17,7 +17,7 @@
         <a href="cart.html">View Cart</a>
         <label for="collection-select">Choose a collection:</label>
         <select id="collection-select">
-            <option value="fruits">Fruits</option>
+            <option value="fruits ">Fruits</option>
             <option value="trees">Trees</option>
             <option value="veges">Vegetables</option>
         </select>
@@ -37,10 +37,11 @@
         <div class="cart-total" id="cart-total">Total: ksh0.00</div>
     </div>
 
+
     <!-- Modal for displaying additional images -->
     <div id="imageModal" class="modal">
         <div class="modal-content">
-            <span class="close">&times;</span>
+            <span class="close" onclick="closeModal()">&times;</span>
             <div id="modal-images">
                 <!-- Images will be inserted here -->
             </div>
@@ -52,7 +53,7 @@
         // Import Firebase
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
         import { getAnalytics } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-analytics.js";
-        import { getFirestore, collection, getDocs, doc, setDoc } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+        import { getFirestore, collection, getDocs } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
         // Your Firebase configuration
         const firebaseConfig = {
@@ -65,28 +66,33 @@
             measurementId: "G-JVWHZPDJX7"
         };
 
-
         // Initialize Firebase
         const app = initializeApp(firebaseConfig);
-        const analytics = getAnalytics(app);
         const db = getFirestore(app);
 
-        // Initialize cart array from localStorage
+        // Initialize cart from localStorage if available
         let cart = JSON.parse(localStorage.getItem('cart')) || [];
+
+        // Function to update localStorage with current cart state
+        function updateCartStorage() {
+            localStorage.setItem('cart', JSON.stringify(cart));
+        }
 
         // Function to create a card element
         function createCard(docId, data) {
-            const imgSrc = data.imagetree1 || 'placeholder.jpg';
+            const imgSrc1 = data.imagetree1 ? data.imagetree1 : 'placeholder.jpg';
+            const imgSrc2 = data.imagetree2 ? data.imagetree2 : 'placeholder.jpg';
+            const imgSrc3 = data.imagetree3 ? data.imagetree3 : 'placeholder.jpg';
             const description = data.Description || 'No description available';
             const price = data.price || 0;
 
             return `
                 <div class="card">
-                    <img src="${imgSrc}" alt="${description}" onclick="showModal('${data.imagetree1}', '${data.imagetree2}', '${data.imagetree3}')">
+                    <img src="${imgSrc1}" alt="${description}" onclick="showModal('${imgSrc1}', '${imgSrc2}', '${imgSrc3}')">
                     <div class="card-title">${docId}</div>
                     <div class="card-desc">${description}</div>
                     <div class="card-price">ksh${price.toFixed(2)}</div>
-                    <button onclick="addToCart('${docId}', '${description}', ${price}, '${imgSrc}')">Add to Cart</button>
+                    <button onclick="addToCart('${docId}', '${description}', ${price}, '${imgSrc1}')">Add to Cart</button>
                 </div>
             `;
         }
@@ -117,10 +123,10 @@
         });
 
         // Initially display the first collection
-        displayCollection("fruits ", "data-container");
+        displayCollection("fruits ", "data-container"); // Adjust to the initial collection you want to display
 
         // Function to show the modal with images
-        window.showModal = function (img1 = 'placeholder.jpg', img2 = 'placeholder.jpg', img3 = 'placeholder.jpg') {
+        function showModal(img1 = 'placeholder.jpg', img2 = 'placeholder.jpg', img3 = 'placeholder.jpg') {
             const modal = document.getElementById('imageModal');
             const modalImages = document.getElementById('modal-images');
             modalImages.innerHTML = `
@@ -128,25 +134,18 @@
                 <img src="${img2}" alt="Image 2">
                 <img src="${img3}" alt="Image 3">
             `;
-            modal.classList.add('active');
-        };
+            modal.style.display = 'block';
+        }
 
-        // Close the modal
-        document.querySelector('.close').onclick = function () {
-            document.getElementById('imageModal').classList.remove('active');
-        };
-
-        window.onclick = function (event) {
-            if (event.target == document.getElementById('imageModal')) {
-                document.getElementById('imageModal').classList.remove('active');
-            }
-        };
+        // Function to close the modal
+        function closeModal() {
+            document.getElementById('imageModal').style.display = 'none';
+        }
 
         // Function to add item to cart
         window.addToCart = function (itemId, itemName, itemPrice, itemImage) {
             const item = {
                 id: itemId,
-                name: itemName,
                 price: itemPrice,
                 image: itemImage,
                 quantity: 1 // Initial quantity
@@ -160,14 +159,9 @@
                 cart.push(item);
             }
 
-            // Save updated cart to localStorage
-            localStorage.setItem('cart', JSON.stringify(cart));
-
-            // Update cart display
+            // Update localStorage and cart display
+            updateCartStorage();
             displayCart();
-
-            // Save cart to Firestore
-            saveCartToFirestore();
         };
 
         // Function to display cart items and calculate total
@@ -189,7 +183,7 @@
                     <div class="cart-item">
                         <img src="${item.image}" alt="${item.name}">
                         <div>
-                            <h4>${item.name}</h4>
+                            <h4>${item.id}</h4>
                             <p>Price: ksh${item.price.toFixed(2)} | Quantity: ${item.quantity}</p>
                         </div>
                         <div class="quantity">
@@ -216,38 +210,17 @@
                     cart.splice(index, 1);
                 }
 
-                // Save updated cart to localStorage
-                localStorage.setItem('cart', JSON.stringify(cart));
-
-                // Update cart display
+                // Update localStorage and cart display
+                updateCartStorage();
                 displayCart();
-
-                // Save cart to Firestore
-                saveCartToFirestore();
             }
         };
 
-        // Function to save cart to Firestore
-        async function saveCartToFirestore() {
-            try {
-                // Check if user is authenticated (you need to implement authentication)
-                const userId = "user123"; // Replace with actual user ID or use Firebase Authentication
-
-                // Define the Firestore document reference
-                const cartDocRef = doc(db, 'carts', userId);
-
-                // Set the cart data in Firestore
-                await setDoc(cartDocRef, { cart });
-                console.log('Cart saved to Firestore:', cart);
-            } catch (error) {
-                console.error('Error saving cart to Firestore:', error);
-            }
-        }
-
-        // Display existing cart items on page load
+        // Initial display of cart items from localStorage
         displayCart();
 
     </script>
+
 </body>
 
 </html>
