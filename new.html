@@ -46,13 +46,28 @@
             text-decoration: none;
             cursor: pointer;
         }
+        h1 {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        h1 a {
+            text-decoration: none;
+            color: #0cd527;
+            transition: color 0.3s;
+        }
+
+        h1 a:hover {
+            color: #0cd527cc;
+        }
+
     </style>
 </head>
 
 <body>
 
     <div class="selector">
-        <a href="cart.html">View Cart</a>
+        <h1><a href="cart.html">View Cart</a></h1>
         <label for="collection-select">Choose a collection:</label>
         <select id="collection-select">
             <option value="fruits">Fruits</option>
