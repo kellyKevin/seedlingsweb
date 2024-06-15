@@ -11,25 +11,35 @@
 
         /* Modal container, hidden by default */
         .modal {
-            display: none; /* Hidden by default */
-            position: fixed; /* Stay in place */
-            z-index: 1; /* Sit on top */
+            display: none;
+            /* Hidden by default */
+            position: fixed;
+            /* Stay in place */
+            z-index: 1;
+            /* Sit on top */
             left: 0;
             top: 0;
-            width: 100%; /* Full width */
-            height: 100%; /* Full height */
-            overflow: auto; /* Enable scroll if needed */
-            background-color: rgb(0, 0, 0); /* Fallback color */
-            background-color: rgba(0, 0, 0, 0.4); /* Black w/ opacity */
+            width: 100%;
+            /* Full width */
+            height: 100%;
+            /* Full height */
+            overflow: auto;
+            /* Enable scroll if needed */
+            background-color: rgb(0, 0, 0);
+            /* Fallback color */
+            background-color: rgba(0, 0, 0, 0.4);
+            /* Black w/ opacity */
         }
 
         /* Modal content */
         .modal-content {
             background-color: #fefefe;
-            margin: 15% auto; /* 15% from the top and centered */
+            margin: 15% auto;
+            /* 15% from the top and centered */
             padding: 20px;
             border: 1px solid #888;
-            width: 80%; /* Could be more or less, depending on screen size */
+            width: 80%;
+            /* Could be more or less, depending on screen size */
         }
 
         /* Close button */
@@ -46,6 +56,7 @@
             text-decoration: none;
             cursor: pointer;
         }
+
         h1 {
             text-align: center;
             margin-bottom: 30px;
@@ -60,6 +71,20 @@
         h1 a:hover {
             color: #0cd527cc;
         }
+        h2 {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        h2 a {
+            text-decoration: none;
+            color: #0cd527;
+            transition: color 0.3s;
+        }
+
+        h2 a:hover {
+            color: #0cd527cc;
+        }
 
     </style>
 </head>
@@ -68,14 +93,15 @@
 
     <div class="selector">
         <h1><a href="cart.html">View Cart</a></h1>
-        <label for="collection-select">Choose a collection:</label>
-        <select id="collection-select">
-            <option value="fruits">Fruits</option>
-            <option value="trees">Trees</option>
-            <option value="veges">Vegetables</option>
-        </select>
-        <button id="fetch-button">Fetch Data</button>
+        <h2><label for="collection-select">Choose a collection:</label>
+            <select id="collection-select">
+                <option value="fruits">Fruits</option>
+                <option value="trees">Trees</option>
+                <option value="veges">Vegetables</option>
+            </select>
+            <button id="fetch-button">Fetch Data</button>
     </div>
+    </h2>
 
     <div class="container" id="data-container">
         <!-- Data will be inserted here -->
@@ -199,45 +225,45 @@
 
         // Function to add item to cart
         // Function to add item to cart
-window.addToCart = function (itemId, itemName, itemPrice, itemImage) {
-    const item = {
-        id: itemId,
-        price: itemPrice,
-        image: itemImage,
-        quantity: 1 // Initial quantity
-    };
+        window.addToCart = function (itemId, itemName, itemPrice, itemImage) {
+            const item = {
+                id: itemId,
+                price: itemPrice,
+                image: itemImage,
+                quantity: 1 // Initial quantity
+            };
 
-    // Check if item already exists in cart
-    const existingItem = cart.find(i => i.id === itemId);
-    if (existingItem) {
-        existingItem.quantity++;
-    } else {
-        cart.push(item);
-    }
+            // Check if item already exists in cart
+            const existingItem = cart.find(i => i.id === itemId);
+            if (existingItem) {
+                existingItem.quantity++;
+            } else {
+                cart.push(item);
+            }
 
-    // Save updated cart to localStorage
-    localStorage.setItem('cart', JSON.stringify(cart));
+            // Save updated cart to localStorage
+            localStorage.setItem('cart', JSON.stringify(cart));
 
-    // Update cart display
-    displayCart();
-};
+            // Update cart display
+            displayCart();
+        };
 
-// Function to display cart items and calculate total
-function displayCart() {
-    const cartContainer = document.getElementById('cart-items');
-    const cartTotal = document.getElementById('cart-total');
-    let total = 0;
+        // Function to display cart items and calculate total
+        function displayCart() {
+            const cartContainer = document.getElementById('cart-items');
+            const cartTotal = document.getElementById('cart-total');
+            let total = 0;
 
-    // Clear previous cart items
-    cartContainer.innerHTML = '';
+            // Clear previous cart items
+            cartContainer.innerHTML = '';
 
-    // Display each item in the cart
-    cart.forEach(item => {
-        const itemTotal = item.price * item.quantity;
-        total += itemTotal;
+            // Display each item in the cart
+            cart.forEach(item => {
+                const itemTotal = item.price * item.quantity;
+                total += itemTotal;
 
-        // HTML for displaying cart item
-        const cartItemHTML = `
+                // HTML for displaying cart item
+                const cartItemHTML = `
             <div class="cart-item">
                 <img src="${item.image}" alt="${item.name}">
                 <div>
@@ -249,12 +275,12 @@ function displayCart() {
                 </div>
             </div>
         `;
-        cartContainer.innerHTML += cartItemHTML;
-    });
+                cartContainer.innerHTML += cartItemHTML;
+            });
 
-    // Display total in cart
-    cartTotal.textContent = `Total: ksh${total.toFixed(2)}`;
-}
+            // Display total in cart
+            cartTotal.textContent = `Total: ksh${total.toFixed(2)}`;
+        }
 
 
         // Function to remove item from cart
