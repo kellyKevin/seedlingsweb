@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Shopping Cart</title>
-    <link rel="stylesheet" href="test.css">
+    <link rel="stylesheet" href="style.css">
     <style>
         /* Base styles */
         body {
@@ -134,7 +134,41 @@
         }
 
         .checkout-btn:hover {
-            background-color: #0cd527cc; /* Darker shade for hover effect */
+            background-color: #0cd527cc;
+        }
+
+        /* Payment methods styles */
+        .payment-methods {
+            margin-top: 20px;
+        }
+
+        .payment-methods h4 {
+            margin-bottom: 10px;
+        }
+
+        .payment-methods label {
+            display: block;
+            margin-bottom: 10px;
+        }
+
+        .payment-details {
+            display: none;
+            margin-top: 20px;
+            border-top: 1px solid #eee;
+            padding-top: 20px;
+        }
+
+        .payment-details.active {
+            display: block;
+        }
+
+        .payment-details input {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 10px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            box-sizing: border-box;
         }
 
         /* Responsive adjustments */
@@ -184,6 +218,36 @@
         </div>
 
         <div class="cart-total" id="cart-total">Total: ksh0.00</div>
+
+        <div class="payment-methods">
+            <h4>Select a Payment Method:</h4>
+            <label>
+                <input type="radio" name="payment-method" value="card"> Credit/Debit Card
+            </label>
+            <label>
+                <input type="radio" name="payment-method" value="mobile"> Mobile Payment
+            </label>
+            <label>
+                <input type="radio" name="payment-method" value="paypal"> PayPal
+            </label>
+        </div>
+
+        <div id="card-details" class="payment-details">
+            <h4>Enter Card Details:</h4>
+            <input type="text" id="card-number" placeholder="Card Number">
+            <input type="text" id="card-expiry" placeholder="Expiry Date (MM/YY)">
+            <input type="text" id="card-cvv" placeholder="CVV">
+        </div>
+
+        <div id="mobile-details" class="payment-details">
+            <h4>Enter Mobile Number:</h4>
+            <input type="text" id="mobile-number" placeholder="Mobile Number">
+        </div>
+
+        <div id="paypal-details" class="payment-details">
+            <h4>Enter PayPal Email:</h4>
+            <input type="email" id="paypal-email" placeholder="PayPal Email">
+        </div>
 
         <button class="checkout-btn" onclick="proceedToPayment()">Proceed to Payment</button>
     </div>
@@ -264,10 +328,75 @@
             }
         }
 
-        // Function to proceed to payment (you can implement your payment logic here)
+        // Function to handle payment method selection
+        document.querySelectorAll('input[name="payment-method"]').forEach(input => {
+            input.addEventListener('change', function () {
+                document.querySelectorAll('.payment-details').forEach(detail => {
+                    detail.classList.remove('active');
+                });
+
+                if (this.value === 'card') {
+                    document.getElementById('card-details').classList.add('active');
+                } else if (this.value === 'mobile') {
+                    document.getElementById('mobile-details').classList.add('active');
+                } else if (this.value === 'paypal') {
+                    document.getElementById('paypal-details').classList.add('active');
+                }
+            });
+        });
+
+        // Function to proceed to payment
         function proceedToPayment() {
-            // Implement your payment logic here, e.g., redirect to a payment gateway
-            alert('Redirecting to payment gateway...');
+            const selectedMethod = document.querySelector('input[name="payment-method"]:checked');
+
+            if (!selectedMethod) {
+                alert('Please select a payment method.');
+                return;
+            }
+
+            processPayment(selectedMethod.value);
+        }
+
+        // Function to process payment based on the selected method
+        function processPayment(method) {
+            let totalAmount = parseFloat(document.getElementById('cart-total').textContent.replace('Total: ksh', ''));
+
+            if (method === 'card') {
+                const cardNumber = document.getElementById('card-number').value;
+                const cardExpiry = document.getElementById('card-expiry').value;
+                const cardCvv = document.getElementById('card-cvv').value;
+
+                if (!cardNumber || !cardExpiry || !cardCvv) {
+                    alert('Please enter all card details.');
+                    return;
+                }
+
+                alert(`Processing card payment for ksh${totalAmount.toFixed(2)}...`);
+
+                // Integrate real card payment processing logic here, e.g., using Stripe
+            } else if (method === 'mobile') {
+                const mobileNumber = document.getElementById('mobile-number').value;
+
+                if (!mobileNumber) {
+                    alert('Please enter your mobile number.');
+                    return;
+                }
+
+                alert(`Processing mobile payment for ksh${totalAmount.toFixed(2)}...`);
+
+                // Integrate real mobile payment processing logic here, e.g., using M-Pesa
+            } else if (method === 'paypal') {
+                const paypalEmail = document.getElementById('paypal-email').value;
+
+                if (!paypalEmail) {
+                    alert('Please enter your PayPal email.');
+                    return;
+                }
+
+                alert(`Processing PayPal payment for ksh${totalAmount.toFixed(2)}...`);
+
+                // Integrate real PayPal payment processing logic here
+            }
         }
     </script>
 
