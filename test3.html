@@ -116,8 +116,8 @@
                 <option value="veges">Vegetables</option>
             </select>
             <button id="fetch-button">Fetch Data</button>
-        </h2>
     </div>
+    </h2>
 
     <div class="container" id="data-container">
         <!-- Data will be inserted here -->
@@ -150,8 +150,8 @@
         // Import Firebase
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
         import { getAnalytics } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-analytics.js";
-        import { getFirestore, collection, getDocs, addDoc, doc, setDoc } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
-        import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+        import { getFirestore, collection, getDocs, doc, setDoc } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+        import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
 
         // Your Firebase configuration
         const firebaseConfig = {
@@ -196,6 +196,7 @@
                     <img src="${imgSrc}" alt="${description}" onclick="showModal('${data.imagetree1}', '${data.imagetree2}', '${data.imagetree3}')">
                     <div class="card-title">${docId}</div>
                     <div class="card-desc">${description}</div>
+                    <button onclick="removeFromCart('${docId}', '${docId}', ${price}, '${imgSrc}')">Remove</button>
                     <div class="card-price">ksh${price.toFixed(2)}</div>
                     <button onclick="addToCart('${docId}', '${docId}', ${price}, '${imgSrc}')">Add to Cart</button>
                 </div>
@@ -252,7 +253,6 @@
         window.addToCart = async function (itemId, itemName, itemPrice, itemImage) {
             if (!currentUser) {
                 alert("Please log in to add items to your cart.");
-                showSignupModal(); // Show signup/login modal if not logged in
                 return;
             }
 
@@ -261,12 +261,13 @@
                 name: itemName,
                 price: itemPrice,
                 image: itemImage,
-                quantity: 1
+                quantity: 1,
+                addedBy: currentUser.email  // Add the userEmail to associate with the item
             };
 
-            const existingItem = cart.find(i => i.id === itemId);
-            if (existingItem) {
-                existingItem.quantity++;
+            const existingItemIndex = cart.findIndex(i => i.id === itemId);
+            if (existingItemIndex !== -1) {
+                cart[existingItemIndex].quantity++;
             } else {
                 cart.push(item);
             }
@@ -275,10 +276,23 @@
             displayCart();
 
             try {
+                // Prepare the data to be stored in Firestore
+                const cartItems = cart.map(cartItem => ({
+                    id: cartItem.id,
+                    name: cartItem.name,
+                    price: cartItem.price,
+                    image: cartItem.image,
+                    quantity: cartItem.quantity,
+                    addedBy: cartItem.addedBy
+                }));
+
+                // Update Firestore document under 'carts/userId'
                 await setDoc(doc(db, "carts", currentUser.uid), {
-                    items: cart
+                    items: cartItems
                 });
+
                 console.log("Cart updated in Firestore");
+                alert(`Item added to cart for user: ${currentUser.email}`);
             } catch (error) {
                 console.error("Error updating cart in Firestore:", error);
             }
@@ -315,51 +329,76 @@
         }
 
         // Function to remove item from cart
-        window.removeFromCart = function (itemId) {
+        window.removeFromCart = async function (itemId) {
+            if (!currentUser) {
+                alert("Please log in to modify your cart.");
+                return;
+            }
+
             const index = cart.findIndex(i => i.id === itemId);
             if (index !== -1) {
                 cart[index].quantity--;
 
                 if (cart[index].quantity <= 0) {
-                    cart.splice(index, 1);
+                    cart.splice(index, 1); // Remove item from cart if quantity is zero or less
                 }
 
-                localStorage.setItem('cart', JSON.stringify(cart));
-                displayCart();
+                localStorage.setItem('cart', JSON.stringify(cart)); // Update localStorage
+                displayCart(); // Update cart display on the webpage
 
                 try {
-                    setDoc(doc(db, "carts", currentUser.uid), {
-                        items: cart
+                    // Prepare the data to be stored in Firestore
+                    const cartItems = cart.map(cartItem => ({
+                        id: cartItem.id,
+                        name: cartItem.name,
+                        price: cartItem.price,
+                        image: cartItem.image,
+                        quantity: cartItem.quantity,
+                        addedBy: cartItem.addedBy
+                    }));
+
+                    // Update Firestore document under 'carts/userId'
+                    await setDoc(doc(db, "carts", currentUser.uid), {
+                        items: cartItems
                     });
+
+                    console.log("Cart updated in Firestore");
+                    alert(`Item removed from the cart for user: ${currentUser.email}`);
                 } catch (error) {
                     console.error("Error removing item from Firestore cart:", error);
                 }
             }
         };
 
-        // Display cart initially
+
         displayCart();
 
-        // Modal for Signup/Login
-        function showSignupModal() {
-            const modal = document.getElementById('authModal');
-            modal.style.display = 'block';
+        const cartModal = document.getElementById('cartModal');
+        const openCartBtn = document.getElementById('open-cart');
+        const closeCartBtn = document.getElementById('close-cart');
+
+        openCartBtn.onclick = function () {
+            cartModal.style.display = "block";
+            displayCart();
         }
 
-        function closeSignupModal() {
-            const modal = document.getElementById('authModal');
-            modal.style.display = 'none';
+        closeCartBtn.onclick = function () {
+            cartModal.style.display = "none";
         }
 
-        // Firebase Authentication functions
+        window.onclick = function (event) {
+            if (event.target == cartModal) {
+                cartModal.style.display = "none";
+            }
+        }
+
+        // Authentication functions
         const signUp = async (email, password) => {
             try {
                 const userCredential = await createUserWithEmailAndPassword(auth, email, password);
                 console.log("User signed up:", userCredential.user);
-                closeSignupModal();
             } catch (error) {
                 console.error("Error signing up:", error);
-                alert("Error signing up. Please try again.");
             }
         };
 
@@ -367,10 +406,8 @@
             try {
                 const userCredential = await signInWithEmailAndPassword(auth, email, password);
                 console.log("User signed in:", userCredential.user);
-                closeSignupModal();
             } catch (error) {
                 console.error("Error signing in:", error);
-                alert("Error signing in. Please try again.");
             }
         };
 
@@ -383,72 +420,12 @@
             }
         };
 
-        // Event listener for the login form
-        document.getElementById('loginForm').addEventListener('submit', async (e) => {
-            e.preventDefault(); // Prevent form from submitting
-
-            // Get form data
-            const email = document.getElementById('email').value;
-            const password = document.getElementById('password').value;
-
-            // Call sign in function
-            signIn(email, password);
-        });
-
-        // Event listener for the signup form
-        document.getElementById('signupForm').addEventListener('submit', async (e) => {
-            e.preventDefault(); // Prevent form from submitting
-
-            // Get form data
-            const email = document.getElementById('signupEmail').value;
-            const password = document.getElementById('signupPassword').value;
-
-            // Call sign up function
-            signUp(email, password);
-        });
-
-        // Display initial data
-        displayCollection("fruits", "data-container");
+        // Example usage
+        // signUp("user@example.com", "password123");
+        // signIn("user@example.com", "password123");
+        // signOutUser();
     </script>
 
-    <!-- Authentication Modal -->
-    <div id="authModal" class="modal">
-        <div class="modal-content">
-            <span class="close" onclick="closeSignupModal()">&times;</span>
-            <h3>Sign Up / Log In</h3>
-            <div id="errorMessage" class="error-message"></div>
-            <div id="loginContainer">
-                <form id="loginForm">
-                    <label for="email">Email:</label>
-                    <input type="email" id="email" name="email" required>
-
-                    <label for="password">Password:</label>
-                    <input type="password" id="password" name="password" required>
-
-                    <button type="submit">Login</button>
-                </form>
-                <div class="signup-link">
-                    <p>Don't have an account? <a href="#" onclick="showSignup()">Sign up here</a></p>
-                </div>
-            </div>
-            <div id="signupContainer" style="display: none;">
-                <form id="signupForm">
-                    <label for="signupEmail">Email:</label>
-                    <input type="email" id="signupEmail" name="signupEmail" required>
-
-                    <label for="signupPassword">Password:</label>
-                    <input type="password" id="signupPassword" name="signupPassword" required>
-
-                    <button type="submit">Sign Up</button>
-                </form>
-                <div class="signup-link">
-                    <p>Already have an account? <a href="#" onclick="showLogin()">Log in here</a></p>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- End of Authentication Modal -->
 
 </body>
 

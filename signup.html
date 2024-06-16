@@ -41,7 +41,8 @@
         }
 
         .signup-container input[type="email"],
-        .signup-container input[type="password"] {
+        .signup-container input[type="password"],
+        .signup-container input[type="text"] {
             width: 100%;
             padding: 10px;
             margin-bottom: 16px;
@@ -108,6 +109,9 @@
     <div class="signup-container">
         <h1>Sign Up</h1>
         <form id="signupForm">
+            <label for="username">Username:</label>
+            <input type="text" id="username" name="username" required>
+
             <label for="email">Email:</label>
             <input type="email" id="email" name="email" required>
 
@@ -164,14 +168,15 @@
             e.preventDefault(); // Prevent form from submitting
 
             // Get form data
+            const username = document.getElementById('username').value;
             const email = document.getElementById('email').value;
             const password = document.getElementById('password').value;
             const errorMessage = document.getElementById('errorMessage');
 
             try {
-                // Create user with email and password
+                // Create user with email, password, and username
                 const userCredential = await createUserWithEmailAndPassword(auth, email, password);
-                const user = userCredential.user;
+                await updateProfile(userCredential.user, { displayName: username }); // Set display name (username)
 
                 alert('Sign up successful!');
                 window.location.href = 'login.html'; // Redirect to login page
@@ -195,4 +200,5 @@
 </body>
 
 </html>
+
 

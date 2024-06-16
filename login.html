@@ -83,6 +83,34 @@
             margin-bottom: 16px;
             text-align: center;
         }
+
+        .user-info {
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        .user-info span {
+            font-weight: bold;
+            color: #333;
+        }
+
+        .signout-button {
+            text-align: center;
+            margin-top: 10px;
+        }
+
+        .signout-button button {
+            background-color: #dc3545;
+            color: #fff;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        .signout-button button:hover {
+            background-color: #c82333;
+        }
     </style>
 </head>
 
@@ -103,13 +131,21 @@
         <div class="signup-link">
             Don't have an account? <a href="signup.html">Sign up</a>
         </div>
+
+        <div class="user-info" id="userInfo" style="display: none;">
+            Logged in as: <span id="userName"></span>
+        </div>
+
+        <div class="signout-button" id="signoutButton" style="display: none;">
+            <button id="signOut">Sign Out</button>
+        </div>
     </div>
 
     <!-- Firebase JS SDK -->
     <script type="module">
         // Import Firebase
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
-        import { getAuth, signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+        import { getAuth, signInWithEmailAndPassword, signOut } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
 
         // Your Firebase configuration
         const firebaseConfig = {
@@ -120,7 +156,7 @@
             messagingSenderId: "1042431917002",
             appId: "1:1042431917002:web:ebea14cb0326379967ed33",
             measurementId: "G-JVWHZPDJX7"
-        }
+        };
 
         // Initialize Firebase
         const app = initializeApp(firebaseConfig);
@@ -140,11 +176,47 @@
                 const userCredential = await signInWithEmailAndPassword(auth, email, password);
                 const user = userCredential.user;
 
+                // Display user information
+                document.getElementById('userName').textContent = user.displayName || email;
+                document.getElementById('userInfo').style.display = 'block';
+                document.getElementById('signoutButton').style.display = 'block';
+
                 alert('Login successful!');
-                window.location.href = 'new.html'; // Redirect to home page or desired page
+                // Redirect to home page or desired page
+                window.location.href = 'new.html'; 
+
             } catch (error) {
                 console.error('Error logging in:', error);
                 errorMessage.textContent = 'Login failed: ' + error.message;
+            }
+        });
+
+        // Sign out button functionality
+        document.getElementById('signOut').addEventListener('click', async () => {
+            try {
+                await signOut(auth);
+                // Reset UI
+                document.getElementById('userInfo').style.display = 'none';
+                document.getElementById('signoutButton').style.display = 'none';
+                console.log('User signed out');
+                // Redirect to login page after sign out
+                window.location.href = 'login.html'; 
+            } catch (error) {
+                console.error('Error signing out:', error);
+            }
+        });
+
+        // Check if user is already signed in on page load
+        auth.onAuthStateChanged((user) => {
+            if (user) {
+                // User is signed in
+                document.getElementById('userName').textContent = user.displayName || user.email;
+                document.getElementById('userInfo').style.display = 'block';
+                document.getElementById('signoutButton').style.display = 'block';
+            } else {
+                // No user is signed in
+                document.getElementById('userInfo').style.display = 'none';
+                document.getElementById('signoutButton').style.display = 'none';
             }
         });
     </script>

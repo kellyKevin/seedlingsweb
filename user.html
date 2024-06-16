@@ -9,7 +9,7 @@
     <style>
         /* Base styles */
         body {
-            background: url('images/bck.png') no-repeat center center fixed;
+            background: url('images/bck.png') no-repeat center center fixed ;
             font-family: 'Arial', sans-serif;
             margin: 0;
             padding: 0;
@@ -87,7 +87,6 @@
             font-size: 18px;
             font-weight: bold;
         }
-
         /* Responsive adjustments */
         @media (max-width: 768px) {
             .cart-item img {
@@ -117,7 +116,6 @@
             }
 
         }
-
         h3 {
             text-align: center;
             margin-bottom: 30px;
@@ -139,23 +137,21 @@
 
     </div>
 
-
     <script>
         // Initialize cart array
         let cart = [];
 
         // Load cart items on page load
         window.onload = function () {
-            // Retrieve user data and cart data from localStorage
-            const userId = localStorage.getItem('userId');
+            // Retrieve cart data from localStorage
             cart = JSON.parse(localStorage.getItem('cart')) || [];
 
             // Display cart items
-            displayCart(userId);
+            displayCart();
         };
 
         // Function to display cart items
-        function displayCart(userId) {
+        function displayCart() {
             const cartContainer = document.getElementById('cart-items');
             const cartTotal = document.getElementById('cart-total');
             let total = 0;
@@ -175,7 +171,6 @@
                         <div class="cart-item-info">
                             <h4>${item.name}</h4>
                             <p>Price: ksh${item.price.toFixed(2)}</p>
-                            <p>User ID: ${userId}</p> <!-- Displaying User ID -->
                         </div>
                         <div class="cart-item-quantity">
                             <input type="number" min="1" value="${item.quantity}" onchange="updateQuantity('${item.id}', this.value)">
@@ -191,8 +186,6 @@
             // Update localStorage with updated cart
             localStorage.setItem('cart', JSON.stringify(cart));
         }
-
-
         // Function to update quantity of items in cart
         function updateQuantity(itemId, newQuantity) {
             // Find item index in cart array
@@ -201,11 +194,11 @@
                 // Update quantity
                 cart[index].quantity = parseInt(newQuantity);
                 // Update cart display
-                displayCart(localStorage.getItem('userId'));
+                displayCart();
             }
         }
-
     </script>
+
 </body>
 
 </html>
