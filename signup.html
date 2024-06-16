@@ -83,6 +83,24 @@
             margin-bottom: 16px;
             text-align: center;
         }
+
+        .signout-button {
+            margin-top: 20px;
+            text-align: center;
+        }
+
+        .signout-button button {
+            background-color: #dc3545;
+            color: #fff;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        .signout-button button:hover {
+            background-color: #c82333;
+        }
     </style>
 </head>
 
@@ -103,13 +121,17 @@
         <div class="login-link">
             Already have an account? <a href="login.html">Login</a>
         </div>
+
+        <div class="signout-button" id="signoutButton" style="display: none;">
+            <button id="signOut">Sign Out</button>
+        </div>
     </div>
 
     <!-- Firebase JS SDK -->
     <script type="module">
         // Import Firebase
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
-        import { getAuth, createUserWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+        import { getAuth, createUserWithEmailAndPassword, signOut } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
 
         // Your Firebase configuration
         const firebaseConfig = {
@@ -125,6 +147,17 @@
         // Initialize Firebase
         const app = initializeApp(firebaseConfig);
         const auth = getAuth(app);
+
+        // Check if user is signed in
+        auth.onAuthStateChanged((user) => {
+            if (user) {
+                console.log('User is signed in:', user.email);
+                document.getElementById('signoutButton').style.display = 'block';
+            } else {
+                console.log('No user signed in');
+                document.getElementById('signoutButton').style.display = 'none';
+            }
+        });
 
         // Add event listener to the form
         document.getElementById('signupForm').addEventListener('submit', async (e) => {
@@ -145,6 +178,17 @@
             } catch (error) {
                 console.error('Error registering user:', error);
                 errorMessage.textContent = 'Error registering user: ' + error.message;
+            }
+        });
+
+        // Sign out button functionality
+        document.getElementById('signOut').addEventListener('click', async () => {
+            try {
+                await signOut(auth);
+                console.log('User signed out');
+                window.location.href = 'login.html'; // Redirect to login page after sign out
+            } catch (error) {
+                console.error('Error signing out:', error);
             }
         });
     </script>
