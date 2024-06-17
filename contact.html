@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -12,33 +13,41 @@
             line-height: 1.6;
             background-color: #f8f9fa;
             padding: 20px;
-            max-width: 800px; /* Adjust as per your design */
-            margin: 0 auto; /* Center align content */
+            max-width: 800px;
+            /* Adjust as per your design */
+            margin: 0 auto;
+            /* Center align content */
         }
+
         .contact-info {
             margin-bottom: 20px;
             padding: 20px;
             background-color: #fff;
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
         }
+
         .contact-info h2 {
             margin-top: 0;
             color: #333;
         }
+
         .contact-info p {
             color: #666;
         }
+
         .contact-form {
             background-color: #fff;
             padding: 20px;
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
         }
+
         .contact-form label {
             font-weight: bold;
             color: #333;
         }
-        .contact-form input[type="text"], 
-        .contact-form input[type="email"], 
+
+        .contact-form input[type="text"],
+        .contact-form input[type="email"],
         .contact-form textarea {
             width: 100%;
             padding: 10px;
@@ -48,9 +57,11 @@
             box-sizing: border-box;
             font-size: 16px;
         }
+
         .contact-form textarea {
             height: 150px;
         }
+
         .contact-form button {
             padding: 12px 20px;
             background-color: #007bff;
@@ -61,9 +72,11 @@
             font-size: 16px;
             transition: background-color 0.3s;
         }
+
         .contact-form button:hover {
             background-color: #0056b3;
         }
+
         h3 {
             text-align: center;
             margin-bottom: 30px;
@@ -78,8 +91,31 @@
         h3 a:hover {
             color: #0cd527cc;
         }
+
+        .reviews-container {
+            margin-top: 30px;
+            padding: 20px;
+            background-color: #fff;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .review {
+            border-bottom: 1px solid #ccc;
+            padding: 10px 0;
+        }
+
+        .review h3 {
+            margin: 0;
+            font-size: 1.2em;
+        }
+
+        .review p {
+            margin: 5px 0;
+            color: #555;
+        }
     </style>
 </head>
+
 <body>
     <h3><a href="index.html">Home Page</a></h3>
 
@@ -102,7 +138,7 @@
 
     <div class="contact-form">
         <h2>Send Us a Message</h2>
-        <form action="submit_contact.php" method="POST">
+        <form id="contactForm">
             <label for="name">Name:</label>
             <input type="text" id="name" name="name" required>
 
@@ -116,5 +152,83 @@
         </form>
     </div>
 
+    <!-- Reviews Container -->
+    <div class="reviews-container" id="reviewsContainer">
+        <h2>Reviews</h2>
+        <!-- Reviews will be inserted here -->
+    </div>
+
+    <script type="module">
+        // Import Firebase scripts
+        import { initializeApp } from 'https://www.gstatic.com/firebasejs/9.18.0/firebase-app.js';
+        import { getFirestore, collection, addDoc, getDocs, serverTimestamp } from 'https://www.gstatic.com/firebasejs/9.18.0/firebase-firestore.js';
+
+        // Your Firebase configuration
+        const firebaseConfig = {
+            apiKey: "AIzaSyBUZJDLktz7qBHUPj_XtPybxz3vkz5cYlQ",
+            authDomain: "seedlingsweb-b6e5e.firebaseapp.com",
+            projectId: "seedlingsweb-b6e5e",
+            storageBucket: "seedlingsweb-b6e5e.appspot.com",
+            messagingSenderId: "1042431917002",
+            appId: "1:1042431917002:web:ebea14cb0326379967ed33",
+            measurementId: "G-JVWHZPDJX7"
+        };
+
+        // Initialize Firebase
+        const app = initializeApp(firebaseConfig);
+        const db = getFirestore(app);
+
+        // Form submission handler
+        document.getElementById('contactForm').addEventListener('submit', async function (event) {
+            event.preventDefault(); // Prevent the form from submitting the traditional way
+
+            // Capture form data
+            const name = document.getElementById('name').value;
+            const email = document.getElementById('email').value;
+            const message = document.getElementById('message').value;
+
+            try {
+                // Save data to Firestore
+                await addDoc(collection(db, "reviews"), {
+                    name: name,
+                    email: email,
+                    message: message,
+                    timestamp: serverTimestamp()
+                });
+                alert('Review submitted successfully!');
+                document.getElementById('contactForm').reset(); // Reset form after submission
+                fetchAndDisplayReviews(); // Fetch and display reviews after new submission
+            } catch (error) {
+                console.error('Error adding review: ', error);
+            }
+        });
+
+        // Function to fetch and display reviews
+        async function fetchAndDisplayReviews() {
+            const reviewsContainer = document.getElementById('reviewsContainer');
+            reviewsContainer.innerHTML = ''; // Clear the container before adding new reviews
+
+            try {
+                const reviewsSnapshot = await getDocs(collection(db, 'reviews'));
+                reviewsSnapshot.forEach((doc) => {
+                    const review = doc.data();
+                    const reviewElement = document.createElement('div');
+                    reviewElement.className = 'review';
+                    reviewElement.innerHTML = `
+                        <h3>${review.name}</h3>
+                        <p><strong>Email:</strong> ${review.email}</p>
+                        <p>${review.message}</p>
+                    `;
+                    reviewsContainer.appendChild(reviewElement);
+                });
+            } catch (error) {
+                console.error('Error fetching reviews: ', error);
+            }
+        }
+
+        // Fetch and display reviews on initial load
+        fetchAndDisplayReviews();
+    </script>
 </body>
+
 </html>
