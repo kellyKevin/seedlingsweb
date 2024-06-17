@@ -9,7 +9,7 @@
     <style>
         /* Base styles */
         body {
-            background: url('images/bck.png') no-repeat center center fixed ;
+            background: url('images/bck.png') no-repeat center center fixed;
             font-family: 'Arial', sans-serif;
             margin: 0;
             padding: 0;
@@ -289,11 +289,9 @@
                             <p>Price: ksh${item.price.toFixed(2)}</p>
                         </div>
                         <div class="cart-item-quantity">
-                            <input type="number" min="1" value="${item.quantity}" onchange="updateQuantity('${item.id}', this.value)">
+                        <input type="number" min="1" value="${item.quantity}" readonly>
                         </div>
-                        <div class="cart-item-remove">
-                            <button onclick="removeFromCart('${item.id}')">Remove</button>
-                        </div>
+
                     </div>
                 `;
                 cartContainer.innerHTML += cartItemHTML;
@@ -305,18 +303,6 @@
             // Update localStorage with updated cart
             localStorage.setItem('cart', JSON.stringify(cart));
         }
-
-        // Function to remove item from cart
-        function removeFromCart(itemId) {
-            // Find item index in cart array
-            const index = cart.findIndex(i => i.id === itemId);
-            if (index !== -1) {
-                cart.splice(index, 1);
-                // Update cart display
-                displayCart();
-            }
-        }
-        
 
         // Function to update quantity of items in cart
         function updateQuantity(itemId, newQuantity) {
