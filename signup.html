@@ -117,7 +117,8 @@
         }
 
         .modal-content {
-            background: url('images/bck.png') no-repeat center center fixed ;
+            background-color: #fefefe;
+            background: url('images/bck.png') no-repeat center center fixed;
             margin: 15% auto;
             padding: 20px;
             border: 1px solid #888;
@@ -138,7 +139,7 @@
             border: 1px solid #ddd;
             padding: 10px;
             margin-bottom: 20px;
-            background: url('images/bck.png') no-repeat center center fixed ;
+            background: url('images/bck.png') no-repeat center center fixed;
             border-radius: 4px;
         }
 
@@ -176,129 +177,125 @@
                 <label for="termsCheckbox">I agree to the <a href="#" id="termsLink">Terms and Conditions</a></label>
             </div>
 
-            <label for="verificationCode">Verification !!!!</label>
             <div class="error-message" id="errorMessage"></div>
 
-            <button type="button" id="signupButton">Sign Up</button>
+            <button type="submit">Sign Up</button>
         </form>
         <div class="login-link">
             Already have an account? <a href="login.html">Login</a>
         </div>
-
         <div class="signout-button" id="signoutButton" style="display: none;">
             <button id="signOut">Sign Out</button>
         </div>
     </div>
 
-   <!-- Modal for Terms and Conditions -->
-   <div id="termsModal" class="modal">
-    <div class="modal-content">
-        <h2>Terms and Conditions</h2>
-        <div class="terms-text">
-            <p>
-                Terms and Conditions for Using and Engaging with Ottawa seedlings
-            </p>
-            <p>
-                Welcome to Ottawa seedlings! We're delighted to have you visit and use our platform dedicated to
-                selling seedlings, plants such as avocado (Hass and Fuerte), passion fruit (yellow and purple), and
-                other varieties. Before you proceed, please read and understand the following terms and conditions
-                that govern your use of our website:
-            </p>
-            <p>
-                <strong>Acceptance of Terms:</strong> By accessing or using Ottawa seedlings, you agree to abide
-                by these terms and conditions, our Privacy Policy, and any other guidelines or rules applicable to
-                specific services or features which may be posted from time to time.
-            </p>
-            <p>
-                <strong>Use of Services:</strong> [Your Website Name] provides a platform for browsing, purchasing,
-                and learning about various seedlings and plants, including but not limited to avocado and passion
-                fruit. You agree to use the services provided on our website solely for lawful purposes and in
-                accordance with these terms.
-            </p>
-            <p>
-                <strong>Product Information:</strong> We strive to provide accurate and up-to-date information about
-                our products, including descriptions, prices, and availability. However, we do not warrant that such
-                information is error-free, complete, or current. Prices and availability are subject to change
-                without notice.
-            </p>
-            <p>
-                <strong>Orders and Payments:</strong>
-            <ul>
-                <li><strong>Order Placement:</strong> When you place an order through [Your Website Name], you are
-                    making an offer to purchase the products selected at the prices and terms stated.</li>
-                <li><strong>Payment:</strong> Payment is required at the time of placing your order unless otherwise
-                    agreed upon. We accept [List accepted payment methods].</li>
-                <li><strong>Cancellation:</strong> Orders may be canceled or modified before they are processed for
-                    shipment. Once shipped, orders cannot be canceled.</li>
-            </ul>
-            </p>
-            <p>
-                <strong>Shipping and Delivery:</strong>
-            <ul>
-                <li><strong>Shipping:</strong> We aim to ship orders promptly and use reasonable efforts to meet
-                    delivery estimates provided. However, delivery times may vary depending on factors beyond our
-                    control.</li>
-                <li><strong>Risk of Loss:</strong> Risk of loss and title for products purchased from Ottawa
-                    seedlings pass to you upon delivery to the carrier.</li>
-            </ul>
-            </p>
-            <p>
-                <strong>Returns and Refunds:</strong>
-            <ul>
-                <li><strong>Returns:</strong> We accept returns of unused and undamaged products within agreed
-                    days of delivery. Please refer to our Returns Policy for detailed instructions.</li>
-                <li><strong>Refunds:</strong> Refunds will be processed within [number] days after receiving the
-                    returned product, minus any applicable shipping charges.</li>
-            </ul>
-            </p>
-            <p>
-                <strong>Intellectual Property:</strong> All content and materials available on Ottawa seedlings,
-                including text, graphics, logos, images, and software, are the property of Ottawa seedlings or
-                its licensors and are protected by intellectual property laws.
-            </p>
-            <p>
-                <strong>Privacy:</strong> Your privacy is important to us. Please review our Privacy Policy to
-                understand how we collect, use, and disclose information about you.
-            </p>
-            <p>
-                <strong>Limitation of Liability:</strong> To the extent permitted by law, Ottawa seedlings shall
-                not be liable for any direct, indirect, incidental, special, or consequential damages arising out of
-                or in any way connected with the use of Ottawa seedlings or the purchase or use of any products
-                sold through Ottawa seedlings.
-            </p>
-            <p>
-                <strong>Governing Law:</strong> These terms and conditions shall be governed by and construed in
-                accordance with the laws of Kenya, without regard to its conflict of law provisions.
-            </p>
-            <p>
-                <strong>Changes to Terms:</strong> Ottawa seedlings reserves the right to update or modify these
-                terms and conditions at any time without prior notice. Changes will be effective when posted on
-                Ottawa seedlings. Your continued use of Ottawa seedlings following the posting of any changes
-                constitutes acceptance of those changes.
-            </p>
-            <p>
-                <strong>Contact Us:</strong> If you have any questions about these terms and conditions, please
-                contact us at <a href="contact.html">Contact</a>.
-            </p>
-            <p>
-                By using Ottawa seedlings, you acknowledge that you have read, understood, and agree to be bound
-                by these terms and conditions. Thank you for visiting Ottawa seedlings, and we hope you enjoy
-                your experience with us!
-            </p>
-            <button id="closeTermsModal">Back</button>
-            <button id="agreeTerms">Agree to Continue</button>
+    <!-- Modal for Terms and Conditions -->
+    <div id="termsModal" class="modal">
+        <div class="modal-content">
+            <h2>Terms and Conditions</h2>
+            <div class="terms-text">
+                <p>
+                    Terms and Conditions for Using and Engaging with Ottawa seedlings
+                </p>
+                <p>
+                    Welcome to Ottawa seedlings! We're delighted to have you visit and use our platform dedicated to
+                    selling seedlings, plants such as avocado (Hass and Fuerte), passion fruit (yellow and purple), and
+                    other varieties. Before you proceed, please read and understand the following terms and conditions
+                    that govern your use of our website:
+                </p>
+                <p>
+                    <strong>Acceptance of Terms:</strong> By accessing or using Ottawa seedlings, you agree to abide
+                    by these terms and conditions, our Privacy Policy, and any other guidelines or rules applicable to
+                    specific services or features which may be posted from time to time.
+                </p>
+                <p>
+                    <strong>Use of Services:</strong> [Your Website Name] provides a platform for browsing, purchasing,
+                    and learning about various seedlings and plants, including but not limited to avocado and passion
+                    fruit. You agree to use the services provided on our website solely for lawful purposes and in
+                    accordance with these terms.
+                </p>
+                <p>
+                    <strong>Product Information:</strong> We strive to provide accurate and up-to-date information about
+                    our products, including descriptions, prices, and availability. However, we do not warrant that such
+                    information is error-free, complete, or current. Prices and availability are subject to change
+                    without notice.
+                </p>
+                <p>
+                    <strong>Orders and Payments:</strong>
+                <ul>
+                    <li><strong>Order Placement:</strong> When you place an order through [Your Website Name], you are
+                        making an offer to purchase the products selected at the prices and terms stated.</li>
+                    <li><strong>Payment:</strong> Payment is required at the time of placing your order unless otherwise
+                        agreed upon. We accept [List accepted payment methods].</li>
+                    <li><strong>Cancellation:</strong> Orders may be canceled or modified before they are processed for
+                        shipment. Once shipped, orders cannot be canceled.</li>
+                </ul>
+                </p>
+                <p>
+                    <strong>Shipping and Delivery:</strong>
+                <ul>
+                    <li><strong>Shipping:</strong> We aim to ship orders promptly and use reasonable efforts to meet
+                        delivery estimates provided. However, delivery times may vary depending on factors beyond our
+                        control.</li>
+                    <li><strong>Risk of Loss:</strong> Risk of loss and title for products purchased from Ottawa
+                        seedlings pass to you upon delivery to the carrier.</li>
+                </ul>
+                </p>
+                <p>
+                    <strong>Returns and Refunds:</strong>
+                <ul>
+                    <li><strong>Returns:</strong> We accept returns of unused and undamaged products within agreed
+                        days of delivery. Please refer to our Returns Policy for detailed instructions.</li>
+                    <li><strong>Refunds:</strong> Refunds will be processed within [number] days after receiving the
+                        returned product, minus any applicable shipping charges.</li>
+                </ul>
+                </p>
+                <p>
+                    <strong>Intellectual Property:</strong> All content and materials available on Ottawa seedlings,
+                    including text, graphics, logos, images, and software, are the property of Ottawa seedlings or
+                    its licensors and are protected by intellectual property laws.
+                </p>
+                <p>
+                    <strong>Privacy:</strong> Your privacy is important to us. Please review our Privacy Policy to
+                    understand how we collect, use, and disclose information about you.
+                </p>
+                <p>
+                    <strong>Limitation of Liability:</strong> To the extent permitted by law, Ottawa seedlings shall
+                    not be liable for any direct, indirect, incidental, special, or consequential damages arising out of
+                    or in any way connected with the use of Ottawa seedlings or the purchase or use of any products
+                    sold through Ottawa seedlings.
+                </p>
+                <p>
+                    <strong>Governing Law:</strong> These terms and conditions shall be governed by and construed in
+                    accordance with the laws of Kenya, without regard to its conflict of law provisions.
+                </p>
+                <p>
+                    <strong>Changes to Terms:</strong> Ottawa seedlings reserves the right to update or modify these
+                    terms and conditions at any time without prior notice. Changes will be effective when posted on
+                    Ottawa seedlings. Your continued use of Ottawa seedlings following the posting of any changes
+                    constitutes acceptance of those changes.
+                </p>
+                <p>
+                    <strong>Contact Us:</strong> If you have any questions about these terms and conditions, please
+                    contact us at <a href="contact.html">Contact</a>.
+                </p>
+                <p>
+                    By using Ottawa seedlings, you acknowledge that you have read, understood, and agree to be bound
+                    by these terms and conditions. Thank you for visiting Ottawa seedlings, and we hope you enjoy
+                    your experience with us!
+                </p>
+                <button id="closeTermsModal">Back</button>
+                <button id="agreeTerms">Agree to Continue</button>
+            </div>
+
         </div>
-
     </div>
-</div>
-
     <!-- Firebase JS SDK -->
     <script type="module">
-
+        
         // Import Firebase
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
-        import { getAuth, createUserWithEmailAndPassword, sendEmailVerification, applyActionCode, signInWithEmailAndPassword, signOut, updateProfile } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
-
+        import { getAuth, createUserWithEmailAndPassword, signOut, updateProfile } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
         // Your Firebase configuration
         const firebaseConfig = {
             apiKey: "AIzaSyBUZJDLktz7qBHUPj_XtPybxz3vkz5cYlQ",
@@ -309,11 +306,9 @@
             appId: "1:1042431917002:web:ebea14cb0326379967ed33",
             measurementId: "G-JVWHZPDJX7"
         };
-
         // Initialize Firebase
         const app = initializeApp(firebaseConfig);
         const auth = getAuth(app);
-
         // Check if user is signed in
         auth.onAuthStateChanged((user) => {
             if (user) {
@@ -324,110 +319,71 @@
                 document.getElementById('signoutButton').style.display = 'none';
             }
         });
-
-        // Function to send verification email with a random code
-        async function sendVerificationEmail(user) {
-            // Generate a random verification code
-            const verificationCode = generateVerificationCode();
-            
-            // Send email with the verification code
-            const actionCodeSettings = {
-                url: window.location.href,
-                handleCodeInApp: true,
-            };
-
-            await sendEmailVerification(user, actionCodeSettings);
-            return verificationCode;
-        }
-
-        // Function to generate a random verification code
-        function generateVerificationCode() {
-            const characters = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ';
-            let verificationCode = '';
-            for (let i = 0; i < 6; i++) {
-                verificationCode += characters.charAt(Math.floor(Math.random() * characters.length));
+        // Add event listener to the form
+        document.getElementById('signupForm').addEventListener('submit', async (e) => {
+            e.preventDefault(); // Prevent form from submitting
+            // Check if terms are agreed
+            if (!document.getElementById('termsCheckbox').checked) {
+                document.getElementById('errorMessage').textContent = 'Please agree to the Terms and Conditions.';
+                return;
             }
-            return verificationCode;
-        }
+            // Get form data
+            const username = document.getElementById('username').value;
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+            const errorMessage = document.getElementById('errorMessage');
+            try {
+                // Create user with email, password, and username
+                const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+                await updateProfile(userCredential.user, { displayName: username }); // Set display name (username)
+                alert('Sign up successful!');
+                window.location.href = 'login.html'; // Redirect to login page
+            } catch (error) {
+                console.error('Error registering user:', error);
+                errorMessage.textContent = 'Error registering user: ' + error.message;
+            }
+        });
+        // Sign out button functionality
+        document.getElementById('signOut').addEventListener('click', async () => {
+            try {
+                await signOut(auth);
+                console.log('User signed out');
+                window.location.href = 'login.html'; // Redirect to login page after sign out
+            } catch (error) {
+                console.error('Error signing out:', error);
+            }
+        });
 
-        // Function to open the terms modal
-        function openTermsModal() {
+        // Function to show the popup
+        function openPopup() {
             document.getElementById("termsModal").style.display = "block";
         }
 
-        // Function to close the terms modal
-        function closeTermsModal() {
+        // Function to close the popup
+        function closePopup() {
             document.getElementById("termsModal").style.display = "none";
         }
 
         // Event listener for the terms link
         document.getElementById("termsLink").addEventListener("click", function (event) {
-            event.preventDefault();
-            openTermsModal();
+            event.preventDefault(); // Prevent the default link behavior
+            openPopup(); // Open the popup instead
         });
 
         // Event listener for closing the terms modal
         document.getElementById("closeTermsModal").addEventListener("click", function () {
-            closeTermsModal();
+            closePopup(); // Close the popup
         });
 
         // Event listener for agreeing to terms
         document.getElementById("agreeTerms").addEventListener("click", function () {
             document.getElementById("termsCheckbox").checked = true;
             document.getElementById("termsCheckbox").disabled = false;
-            closeTermsModal();
+            closePopup(); // Close the popup after agreeing
         });
 
-        // Sign up button event listener
-        document.getElementById('signupButton').addEventListener('click', async () => {
-            // Check if terms are agreed
-            if (!document.getElementById('termsCheckbox').checked) {
-                document.getElementById('errorMessage').textContent = 'Please agree to the Terms and Conditions.';
-                return;
-            }
-
-            const username = document.getElementById('username').value;
-            const email = document.getElementById('email').value;
-            const password = document.getElementById('password').value;
-            const errorMessage = document.getElementById('errorMessage');
-
-            try {
-                // Create user with email and password
-                const userCredential = await createUserWithEmailAndPassword(auth, email, password);
-                
-                // Update user profile with username
-                await updateProfile(userCredential.user, { displayName: username });
-
-                // Send verification email and get verification code
-                const verificationCode = await sendVerificationEmail(userCredential.user);
-                
-                // Prompt user for verification code input
-                const code = prompt(`Verifying via ${email}. `);
-                
-                if (code === verificationCode) {
-                    // Apply verification code
-                    await applyActionCode(auth, code);
-                    alert('Email verification successful! You can now log in.');
-                    window.location.href = 'login.html';
-                } else {
-                    throw new Error('Incorrect verification code. Please try again.');
-                }
-            } catch (error) {
-                console.error('Error registering user:', error);
-                errorMessage.textContent = 'Error registering user: ' + error.message;
-            }
-        });
-
-        // Sign out button event listener
-        document.getElementById('signOut').addEventListener('click', async () => {
-            try {
-                await signOut(auth);
-                console.log('User signed out');
-                window.location.href = 'login.html';
-            } catch (error) {
-                console.error('Error signing out:', error);
-            }
-        });
+        // Firebase initialization and authentication code
+        // (Add your Firebase configuration and authentication logic here)
 
     </script>
 </body>
