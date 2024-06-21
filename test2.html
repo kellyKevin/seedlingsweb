@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Seedling</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+        }
+        header, section {
+            padding: 20px;
+            text-align: center;
+        }
+        header {
+            background-color: #16de04;
+            border-bottom: 1px solid #c14040;
+        }
+        header nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        header nav a {
+            text-decoration: none;
+            color: #333;
+            margin: 0 10px;
+        }
+        .hero {
+            position: relative;
+        }
+        .hero img {
+            width: 100%;
+            height: auto;
+        }
+        .hero .hero-text {
+            position: absolute;
+            bottom: 20px;
+            left: 20px;
+            color: rgba(237, 232, 232, 0.614);
+            background-color: rgba(0, 0, 0, 0.5);
+            padding: 10px;
+        }
+        .video-section {
+            margin: 20px 0;
+            position: relative;
+        }
+        .video-section img {
+            width: 100%;
+            height: auto;
+        }
+        .video-slideshow {
+            position: relative;
+            max-width: 100%;
+            max-height: 500px;
+            overflow: hidden;
+        }
+        .video-slideshow img {
+            width: 100%;
+            height: auto;
+            display: none;
+        }
+        .video-slideshow img.active {
+            display: block;
+        }
+        .video-controls {
+            position: absolute;
+            bottom: 10px;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 1;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <nav>
+            <div>
+                <a href="#"><img src="logo.png" alt="Seedling Logo" width="50"></a>
+            </div>
+            <div>
+                <a href="#">Find a Store</a>
+                <a href="#">Help</a>
+                <a href="#">Join Us</a>
+                <a href="#">Sign In</a>
+            </div>
+        </nav>
+    </header>
+    <section class="hero">
+        <img src="images/R.jpeg" alt="New from Seedling">
+        <div class="hero-text">
+            <h1>New Arrivals from Seedling</h1>
+            <p>Modern classics for summer, featuring the AJ 1 High '85 'Metallic Burgundy'.</p>
+            <button onclick="showProducts()">Shop</button>
+        </div>
+    </section>
+    <section class="video-section">
+        <h2>DON’T STOP DISBELIEVING</h2>
+        <div class="video-slideshow">
+            <img src="images/wp6194754.webp" alt="Latest in Running" class="active">
+            <img src="images/another-image.jpg" alt="Another Image">
+            <img src="images/yet-another-image.jpg" alt="Yet Another Image">
+            <!-- Add more images as needed -->
+        </div>
+        <div class="video-controls">
+            <button onclick="prevSlide()">Previous</button>
+            <button onclick="nextSlide()">Next</button>
+        </div>
+    </section>
+
+    <script>
+        let slideIndex = 0;
+        const slides = document.querySelectorAll('.video-slideshow img');
+
+        function showSlides() {
+            slides.forEach(slide => slide.style.display = 'none');
+            slideIndex++;
+            if (slideIndex > slides.length) {
+                slideIndex = 1;
+            }
+            slides[slideIndex - 1].style.display = 'block';
+            setTimeout(showSlides, 3000); // Change image every 5 seconds (5000ms)
+        }
+
+        function prevSlide() {
+            if (slideIndex > 1) {
+                slideIndex--;
+            } else {
+                slideIndex = slides.length;
+            }
+            showSlides();
+        }
+
+        function nextSlide() {
+            if (slideIndex < slides.length) {
+                slideIndex++;
+            } else {
+                slideIndex = 1;
+            }
+            showSlides();
+        }
+
+        showSlides(); // Start slideshow automatically
+    </script>
+</body>
+</html>
