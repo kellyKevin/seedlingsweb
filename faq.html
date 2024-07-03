@@ -28,6 +28,7 @@
             font-size: 18px; /* Larger font size for questions */
         }
         .answer {
+            display: none; /* Hide answers by default */
             color: #000000;
             font-size: 16px; /* Font size for answers */
         }
@@ -44,7 +45,7 @@
             color: #0056b3; /* Darker color on hover */
         }
         .answer.active {
-            display: block;
+            display: block; /* Show answers when active class is applied */
         }
         h3 {
             text-align: center;
@@ -60,15 +61,53 @@
         h3 a:hover {
             color: #0cd527cc;
         }
+
+        /* Styles for search bar and table of contents */
+        .search-container {
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .toc {
+            margin-bottom: 20px;
+        }
+
+        .toc a {
+            display: block;
+            margin-bottom: 10px;
+            text-decoration: none;
+            color: #333;
+            transition: color 0.3s;
+        }
+
+        .toc a:hover {
+            color: #000;
+        }
     </style>
 </head>
 <body>
+    <div class="search-container">
+        <input type="text" id="searchInput" onkeyup="searchFAQ()" placeholder="Search for questions...">
+    </div>
+
     <h3><a href="index.html">Home Page</a></h3>
 
     <h1 style="text-align: center;">Frequently Asked Questions</h1>
 
+    <div class="toc">
+        <strong>Table of Contents:</strong>
+        <ul id="tableOfContents">
+            <li><a href="#question1">What payment methods do you accept?</a></li>
+            <li><a href="#question2">How can I track my order?</a></li>
+            <li><a href="#question3">What is your return policy?</a></li>
+            <li><a href="#question4">Do you offer international shipping?</a></li>
+            <li><a href="#question5">How do I contact customer support?</a></li>
+            <!-- Add more entries as needed -->
+        </ul>
+    </div>
+
     <div class="faq-section">
-        <div class="question" onclick="toggleAnswer(1)">What payment methods do you accept?</div>
+        <div class="question" id="question1" onclick="toggleAnswer('answer1')">What payment methods do you accept?</div>
         <div class="answer" id="answer1">
             <p>We accept the following payment methods:</p>
             <ul>
@@ -81,7 +120,7 @@
     </div>
 
     <div class="faq-section">
-        <div class="question" onclick="toggleAnswer(2)">How can I track my order?</div>
+        <div class="question" id="question2" onclick="toggleAnswer('answer2')">How can I track my order?</div>
         <div class="answer" id="answer2">
             <p>Once your order has been processed and shipped, you will receive a confirmation email with a tracking number. You can use this tracking number to:</p>
             <ul>
@@ -93,7 +132,7 @@
     </div>
 
     <div class="faq-section">
-        <div class="question" onclick="toggleAnswer(3)">What is your return policy?</div>
+        <div class="question" id="question3" onclick="toggleAnswer('answer3')">What is your return policy?</div>
         <div class="answer" id="answer3">
             <p>We offer a 30-day return policy for most items. Items must be returned:</p>
             <ul>
@@ -105,15 +144,31 @@
         </div>
     </div>
 
+    <div class="faq-section">
+        <div class="question" id="question4" onclick="toggleAnswer('answer4')">Do you offer international shipping?</div>
+        <div class="answer" id="answer4">
+            <p>Yes, we offer international shipping to most countries. Shipping costs and delivery times may vary depending on the destination. During checkout, you can view available shipping options for your location.</p>
+            <p>For more information about international shipping, please <a href="contact.html">contact us</a>.</p>
+        </div>
+    </div>
+
+    <div class="faq-section">
+        <div class="question" id="question5" onclick="toggleAnswer('answer5')">How do I contact customer support?</div>
+        <div class="answer" id="answer5">
+            <p>You can contact our customer support team through the following channels:</p>
+            <ul>
+                <li>Email: support@yourwebsite.com</li>
+                <li>Phone: +1-XXX-XXX-XXXX</li>
+                <li>Live Chat: Available on our website during business hours</li>
+            </ul>
+            <p>Our support team is available to assist you with any questions or concerns you may have.</p>
+        </div>
+    </div>
+
     <!-- Add more FAQ sections as needed -->
 
-    <script>
-        function toggleAnswer(id) {
-            const answer = document.getElementById(`answer${id}`);
-            answer.classList.toggle('active');
-        }
-    </script>
-
+    <script src="faq.js" type="module"></script>
+    
 </body>
 </html>
 

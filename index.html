@@ -7,8 +7,7 @@
     <title>Ottawa's Premier Garden Centre</title>
     <link rel="stylesheet" href="styles.css">
     <style>
-        
-
+        /* Media queries for responsive design */
         @media screen and (max-width: 768px) {
             .hero {
                 padding: 30px 10px;
@@ -33,6 +32,8 @@
                 padding: 8px;
             }
         }
+
+        /* Additional styling for accessibility and contrast */
         h3 {
             text-align: center;
             margin-bottom: 30px;
@@ -46,31 +47,114 @@
 
         h3 a:hover {
             color: #0cd527cc;
+            /* Light green on hover */
+        }
+
+        /* Skip-to-content link */
+        .skip-to-content {
+            position: absolute;
+            top: -40px;
+            left: 10px;
+            background-color: #000;
+            color: #fff;
+            padding: 10px;
+            z-index: 1000;
+            text-decoration: none;
+        }
+
+        .skip-to-content:focus {
+            top: 0;
+        }
+
+        /* Improve text contrast */
+        body {
+            color: #333;
+            /* Dark gray text */
+            background-color: #fff;
+            /* White background */
+        }
+
+        /* styles.css */
+
+        /* Improve readability and contrast */
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+        }
+
+        /* Adjust padding and font sizes for better responsiveness */
+        @media screen and (max-width: 768px) {
+            .hero {
+                padding: 30px 10px;
+            }
+
+            .nav a {
+                padding: 10px;
+            }
+        }
+
+        @media screen and (max-width: 480px) {
+            .hero {
+                padding: 20px 5px;
+            }
+
+            .buttons {
+                flex-direction: column;
+                gap: 10px;
+            }
+
+            .nav a {
+                padding: 8px;
+            }
+        }
+
+        /* Additional styles for buttons and links */
+        a {
+            text-decoration: none;
+            color: #007bff;
+            /* Blue color for links */
+        }
+
+        a:hover {
+            text-decoration: underline;
+        }
+
+        /* Footer style */
+        .footer {
+            background-color: #f8f9fa;
+            /* Light gray background */
+            padding: 20px;
+            text-align: center;
+            color: #333;
+            /* Dark gray text */
         }
     </style>
 </head>
 
 <body>
+    <a class="skip-to-content" href="#content">Skip to Content</a>
+
     <div class="hero">
-        <h1>Welcome to Ottawa seedlings</h1>
+        <h1>Welcome to Ottawa Seedlings</h1>
         <h2>Garden Centre</h2>
         <div class="buttons">
             <a href="https://www.google.com/maps/place/Your+Location+Here" target="_blank">Get Directions</a>
             <a href="faq.html" target="_blank">Read FAQs</a>
-
+            
         </div>
-        <h3><a href="signup.html">Log-in/sign-in</a></h3>
+        <h3><a href="signup.html">Log-in/Sign-in</a></h3>
     </div>
     <nav class="nav">
         <a href="about.html">About Us</a>
         <a href="new.html">Products</a>
         <a href="contact.html">Contact</a>
     </nav>
-    <section class="content">
+    <section id="content" class="content">
         <h2>Our Products</h2>
         <p>Explore a wide range of plants, gardening tools, and supplies at our garden centre. We offer quality products
             to help you create and maintain a beautiful garden.</p>
-        <p>Include more details about specific product categories, seasonal offers, or featured items to engage visitors.</p>
+        <p>Include more details about specific product categories, seasonal offers, or featured items to engage
+            visitors.</p>
     </section>
     <footer class="footer">
         <p>&copy; 2024 Ottawa Garden Centre. All rights reserved.</p>

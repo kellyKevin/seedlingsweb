@@ -5,9 +5,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Login</title>
-    <link rel="stylesheet" href="styles.css"> <!-- Link to your CSS file for styling -->
+    <link rel="stylesheet" href="styles.css">
     <style>
-        /* Inline styles for the login form */
         body {
             font-family: Arial, sans-serif;
             background-color: #f8f9fa;
@@ -16,100 +15,6 @@
             align-items: center;
             height: 100vh;
             margin: 0;
-        }
-
-        .login-container {
-            background-color: #fff;
-            padding: 30px;
-            border-radius: 8px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-            width: 100%;
-            max-width: 400px;
-            box-sizing: border-box;
-        }
-
-        .login-container h1 {
-            text-align: center;
-            margin-bottom: 24px;
-            color: #333;
-        }
-
-        .login-container label {
-            display: block;
-            margin-bottom: 8px;
-            color: #333;
-        }
-
-        .login-container input[type="email"],
-        .login-container input[type="password"] {
-            width: 100%;
-            padding: 10px;
-            margin-bottom: 16px;
-            border: 1px solid #ccc;
-            border-radius: 4px;
-            box-sizing: border-box;
-        }
-
-        .login-container button {
-            width: 100%;
-            padding: 12px;
-            background-color: #007bff;
-            color: #fff;
-            border: none;
-            border-radius: 4px;
-            cursor: pointer;
-        }
-
-        .login-container button:hover {
-            background-color: #0056b3;
-        }
-
-        .login-container .signup-link {
-            text-align: center;
-            margin-top: 20px;
-        }
-
-        .login-container .signup-link a {
-            color: #28a745;
-            text-decoration: none;
-        }
-
-        .login-container .signup-link a:hover {
-            text-decoration: underline;
-        }
-
-        .error-message {
-            color: red;
-            margin-bottom: 16px;
-            text-align: center;
-        }
-
-        .user-info {
-            text-align: center;
-            margin-top: 20px;
-        }
-
-        .user-info span {
-            font-weight: bold;
-            color: #333;
-        }
-
-        .signout-button {
-            text-align: center;
-            margin-top: 10px;
-        }
-
-        .signout-button button {
-            background-color: #dc3545;
-            color: #fff;
-            border: none;
-            padding: 10px 20px;
-            border-radius: 4px;
-            cursor: pointer;
-        }
-
-        .signout-button button:hover {
-            background-color: #c82333;
         }
     </style>
 </head>
@@ -141,85 +46,9 @@
         </div>
     </div>
 
-    <!-- Firebase JS SDK -->
-    <script type="module">
-        // Import Firebase
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
-        import { getAuth, signInWithEmailAndPassword, signOut } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
-
-        // Your Firebase configuration
-        const firebaseConfig = {
-            apiKey: "AIzaSyBUZJDLktz7qBHUPj_XtPybxz3vkz5cYlQ",
-            authDomain: "seedlingsweb-b6e5e.firebaseapp.com",
-            projectId: "seedlingsweb-b6e5e",
-            storageBucket: "seedlingsweb-b6e5e.appspot.com",
-            messagingSenderId: "1042431917002",
-            appId: "1:1042431917002:web:ebea14cb0326379967ed33",
-            measurementId: "G-JVWHZPDJX7"
-        };
-
-        // Initialize Firebase
-        const app = initializeApp(firebaseConfig);
-        const auth = getAuth(app);
-
-        // Add event listener to the form
-        document.getElementById('loginForm').addEventListener('submit', async (e) => {
-            e.preventDefault(); // Prevent form from submitting
-
-            // Get form data
-            const email = document.getElementById('email').value;
-            const password = document.getElementById('password').value;
-            const errorMessage = document.getElementById('errorMessage');
-
-            try {
-                // Sign in with email and password
-                const userCredential = await signInWithEmailAndPassword(auth, email, password);
-                const user = userCredential.user;
-
-                // Display user information
-                document.getElementById('userName').textContent = user.displayName || email;
-                document.getElementById('userInfo').style.display = 'block';
-                document.getElementById('signoutButton').style.display = 'block';
-
-                alert('Login successful!');
-                // Redirect to home page or desired page
-                window.location.href = 'new.html'; 
-
-            } catch (error) {
-                console.error('Error logging in:', error);
-                errorMessage.textContent = 'Login failed: ' + error.message;
-            }
-        });
-
-        // Sign out button functionality
-        document.getElementById('signOut').addEventListener('click', async () => {
-            try {
-                await signOut(auth);
-                // Reset UI
-                document.getElementById('userInfo').style.display = 'none';
-                document.getElementById('signoutButton').style.display = 'none';
-                console.log('User signed out');
-                // Redirect to login page after sign out
-                window.location.href = 'login.html'; 
-            } catch (error) {
-                console.error('Error signing out:', error);
-            }
-        });
-
-        // Check if user is already signed in on page load
-        auth.onAuthStateChanged((user) => {
-            if (user) {
-                // User is signed in
-                document.getElementById('userName').textContent = user.displayName || user.email;
-                document.getElementById('userInfo').style.display = 'block';
-                document.getElementById('signoutButton').style.display = 'block';
-            } else {
-                // No user is signed in
-                document.getElementById('userInfo').style.display = 'none';
-                document.getElementById('signoutButton').style.display = 'none';
-            }
-        });
-    </script>
+    <!-- Firebase SDK and JavaScript -->
+    <script src="firebase-config.js" type="module"></script>
+    <script src="app.js" type="module"></script>
 </body>
 
 </html>
