@@ -1,3 +1,4 @@
+#User can only signin/login first in order to see the data in the website
 # Seedlings Website
 
 Welcome to the Seedlings Website repository! This project aims to provide a platform for selling different types of seedlings, focusing on enhancing gardening and agriculture practices.
