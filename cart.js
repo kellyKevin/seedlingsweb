@@ -1,3 +1,6 @@
+import { db } from "./firebase-config.js";
+import { doc, getDoc, runTransaction } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+
 // Initialize cart array
 let cart = [];
 
@@ -90,7 +93,7 @@ function proceedToPayment() {
 }
 
 // Function to process payment based on the selected method
-function processPayment(method) {
+async function processPayment(method) {
     let totalAmount = parseFloat(document.getElementById('cart-total').textContent.replace('Total: ksh', ''));
 
     if (method === 'card') {
@@ -102,31 +105,83 @@ function processPayment(method) {
             alert('Please enter all card details.');
             return;
         }
-
-        alert(`Processing card payment for ksh${totalAmount.toFixed(2)}...`);
-
-        // Integrate real card payment processing logic here, e.g., using Stripe
     } else if (method === 'mobile') {
         const mobileNumber = document.getElementById('mobile-number').value;
-
         if (!mobileNumber) {
             alert('Please enter your mobile number.');
             return;
         }
-
-        alert(`Processing mobile payment for ksh${totalAmount.toFixed(2)}...`);
-
-        // Integrate real mobile payment processing logic here, e.g., using M-Pesa
     } else if (method === 'paypal') {
         const paypalEmail = document.getElementById('paypal-email').value;
-
         if (!paypalEmail) {
             alert('Please enter your PayPal email.');
             return;
         }
+    }
 
-        alert(`Processing PayPal payment for ksh${totalAmount.toFixed(2)}...`);
+    alert(`Processing ${method} payment for ksh${totalAmount.toFixed(2)}...`);
 
-        // Integrate real PayPal payment processing logic here
+    // Synchronize inventory with backend state changes
+    try {
+        await updateInventoryAfterPayment();
+        alert('Payment successful and inventory updated!');
+
+        // Clear cart after successful payment
+        cart = [];
+        localStorage.setItem('cart', JSON.stringify(cart));
+        displayCart();
+
+        // Optionally redirect to a success page
+        // window.location.href = 'success.html';
+    } catch (error) {
+        console.error('Error updating inventory:', error);
+        alert('Payment failed during inventory synchronization: ' + error.message);
+    }
+}
+
+async function updateInventoryAfterPayment() {
+    if (cart.length === 0) return;
+
+    try {
+        await runTransaction(db, async (transaction) => {
+            const updates = [];
+
+            // First, read all necessary documents
+            for (const item of cart) {
+                if (!item.collection || !item.id) {
+                    console.warn(`Item ${item.name} is missing collection or ID info.`);
+                    continue;
+                }
+                const productRef = doc(db, item.collection.trim(), item.id);
+                const productDoc = await transaction.get(productRef);
+
+                if (!productDoc.exists()) {
+                    throw new Error(`Product ${item.name} does not exist!`);
+                }
+
+                const currentStock = productDoc.data().stock || 0;
+                if (currentStock < item.quantity) {
+                    throw new Error(`Not enough stock for ${item.name}. Available: ${currentStock}, Requested: ${item.quantity}`);
+                }
+
+                updates.push({
+                    ref: productRef,
+                    newStock: currentStock - item.quantity,
+                    name: item.name
+                });
+            }
+
+            // Then, perform all updates
+            for (const update of updates) {
+                transaction.update(update.ref, {
+                    stock: update.newStock
+                });
+                console.log(`Inventory update prepared for ${update.name}`);
+            }
+        });
+        console.log('All inventory updates committed successfully.');
+    } catch (e) {
+        console.error('Transaction failed: ', e);
+        throw e;
     }
 }
